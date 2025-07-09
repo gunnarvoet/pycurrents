@@ -1,0 +1,57 @@
+/******************************************************************************
+
+  FILE:  arrdep.cnt
+
+         This control file is used with the arrdep program
+         to generate a text file of time ranges for profiles that
+         occurred while the ship was on-station or underway,
+         depending on the setting of the range: parameter below.
+
+         This particular version is set for on-station.
+
+  INPUT:  text file of ship velocity (.nav output from adcpsect)
+  OUTPUT: text file of time ranges
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  reference_file:   < input file of ship velocity relative to reference layer >
+  output_file:      < output filename >
+
+  year_base=        < base year for decimal days >
+
+  n_refs=       <13> { number of ensembles to use in calculation }
+  i_ref_l0=     <6>  { index of first ensemble used before change in velocity }
+  i_ref_l1=     <6>  { index of last ensemble used before change in velocity }
+  i_ref_r0=     <8>  { index of first ensemble used after change in velocity }
+  i_ref_r1=     <8>  { index of last ensemble used after change in velocity }
+
+  range:        < on_station | underway | all | whole_station | whole_underway >
+  up_thresh=    <2.5> { m/s, for jump detection, about 1/2 underway speed }
+  down_thresh=  <2.5> { m/s, for jump detection, about 1/2 underway speed }
+
+  margin=       <10>  { seconds to subtract from first time, add to second,
+                        to allow for rounding errors and ensure that the
+                        time range brackets the ensemble times }
+-----------------------------------------------------------------------------*/
+
+      reference_file:   ../nav/ademo.nav
+      output_file:      ademo_uw.arr
+
+      year_base=   1993
+      n_refs=       13        /* number of ensembles used in calculation
+                                 of time shift */
+      i_ref_l0=     1         /* first and  */
+      i_ref_l1=     5         /* last profile used before change of nav - vel*/
+      i_ref_r0=     7         /* "l" is before jump, "r" is after */
+      i_ref_r1=     11        /* minimum is 1, not zero */
+
+      range:       underway 
+      up_thresh=    2.5         /* m/s, for jump detection */
+      down_thresh=  2.5
+
+      margin=    10          /* seconds to subtract from first time, add to
+                               second, to allow for rounding errors and ensure
+                               that the time range brackets the ensemble
+                               times. */
+
+/*****************************************************************************/

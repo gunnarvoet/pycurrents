@@ -1,0 +1,60 @@
+/******************************************************************************
+
+  FILE:  smoothr.cnt
+
+         This control file is used with the smoothr program
+         to interpolate and smooth the absolute reference layer velocities
+         (derived from the refabs program) to the profile times.
+         It uses a Blackman window function of width T:
+         w(t) = 0.42 - 0.5 * cos(2 * pi *t / T) + 0.08 * cos(4 * pi * t / T).
+         It also calculates profile positions from the smoothed velocities.
+
+INPUT:   1) text file of absolute ref layer velocities averaged over 
+            fix intervals, with gap information (output of refabs)
+         2) text file of time and ship velocity relative to reference 
+            layer for each profile (output of adcpsect, navigation 
+            option: the same .nav file that was used as input to
+            refabs)
+
+OUTPUT:  1) text file of absolute ref layer velocity (u & v), absolute 
+            ship velocity, and positions interpolated and smoothed 
+            to the profile times
+         2) binary file (.bin) with same information as text file 
+            for use with Matlab plotting routine 'callrefp.m'
+         3) a log file (.log) with lots of information about the
+            fixes and the navigation calculation
+
+
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  reference_file:    < input file of relative ref. layer velocities (.nav) >
+  refabs_output:     < input file of raw absolute ref. layer vel. from refabs >
+  output:            < text output filename >
+  filter_hwidth=     < half-width of filter in decimal days >
+  min_filter_fraction=  < how much of filter mass must have data: 0 to 1 >
+  max_gap_ratio=     < parameter limiting gap acceptance; suggest 0.05 >
+  max_gap_distance=  < distance uncertainty threshold for position calc. (m) >
+  max_gap_time=      < gap time threshold for starting a segment (seconds) >
+  ensemble_time=     < no. of seconds in ensemble >
+  max_speed=         < max. speed of ship in question (m/s) >
+  min_speed=         < expected short-term speed variability on or off station >
+  iterations=        < no. of times to optimize the positions: 3-5 for accuracy >
+  fix_to_dr_limit=   < threshold for printing fix times and deviations (deg) >
+-----------------------------------------------------------------------------*/
+
+  reference_file:       ademo.nav
+  refabs_output:        ademo.ref
+  output:               ademo.sm
+  filter_hwidth=        0.0208333     /* half an hour */
+  min_filter_fraction=  0.5
+  max_gap_ratio=        0.05
+  max_gap_distance=     50            /* meters */
+  max_gap_time=         30            /* seconds */
+  ensemble_time=        300           /* 5-minute ensemble */
+  max_speed=            5.0
+  min_speed=            1.0
+  iterations=           5
+  fix_to_dr_limit=      0.00050
+
+/*****************************************************************************/

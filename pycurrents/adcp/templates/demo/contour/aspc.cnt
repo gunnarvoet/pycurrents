@@ -1,0 +1,250 @@
+/******************************************************************************
+
+  FILE:  adcpsect.cnt
+
+  This control file is used with the adcpsect program
+  to extract ADCP data for specified sections along a cruise track
+  from a CODAS database, perform the desired calculations,
+  and write the result to text and Matlab files.
+  The sections are specified as time ranges.
+
+  This particular version is used to extract
+  water track velocities for plotting contours.
+
+  INPUT:  CODAS database
+  OUTPUT: 1. text file (.con file) with following columns:
+             a. x-axis data (latitude in decimal degrees for this example)
+             b. y-axis data (depth in meters for this example)
+             c. zonal velocity (in cm/s for this example)
+             d. meridional velocity (in cm/s for this example)
+          2. text file of statistics--mean (.sta file)
+          3. Matlab files
+             a. _uv.mat contains array "uv" with two columns for each ensemble,
+                first u and then v.  The row corresponds to the depth grid.
+             b. _xy.mat contains array "xyt" with a column for each ensemble,
+                and three rows: longitude, latitude, decimal day;
+                and vectors "z" and "zc" with the depth grid and the grid
+                interval centers, respectively.
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < output filename >
+  step_size:    < number of profiles to advance >
+  ndepth:       < number of depth bins to read and process >
+  time_ranges:  < combined or separate >
+  year_base=    < base year for decimal days >
+
+  option_list:
+    [ verbose ]                       { prints debugging and auxiliary output }
+    [ underway?    < no | yes >
+        limit=     <3>  ]                   { limit in m/s }
+    [ pg_min=      <30> ]
+    [ AGC_margin=  <10> ]
+
+    [ skew_limit:
+        agc_limit=  <100>
+        max_velocity_difference= <0.8> ]                                { m/s }
+
+    [ reference:       { choose only one of the following: }
+        < reference_bins <5> to <20> |
+          none |
+          final_ship_ref |
+          nav_position |
+          nav_velocity |
+          bottom_track |
+          dir_position > ]
+
+    [ navigation:      { output in .nav text file }
+                       { choose one or more of the ff. then 'end' }
+        [reference_bins <5> to <20>] {bin range; first bin is 1}
+        [final_ship_ref]
+        [nav_position]
+        [nav_velocity]
+        [bottom_track]
+        [dir_position]
+        end ]
+
+    [ rotate:  < ship_coordinates | n > ]
+        { where <n> is the angle in degrees, old x-axis to new x-axis }
+
+    [ ctd:
+        dbname:  < CODAS CTD database name > ]
+
+    [ regrid:
+        < integrate | interpolate | centered_average | average |
+          per_grid_interval >
+        < depth | svan | pot_svan | sigma_theta | sigma_t >
+          { one of the last 4 only if the ctd: option has been selected }
+        < grid      number= <50> origin= <16> increment= <8> |
+          grid_list number= < 5> boundaries: <20> <40> <60> <80> <100> > ]
+
+    [ contour:         { output in .con text file }
+        < latitude | longitude | time >
+        < middle | mean >
+        minimum_npts= <10>
+        units=        <0.01> ]
+
+    [ vector:          { output in .vec text file }
+        minimum_npts= <10> ]
+
+    [ transport:       { output in .trn text file and _tr.mat Matlab Mat-file }
+        minimum_npts= <10>
+        units=        <1.e6>                                  { for Sverdrups }
+        direction=    < all | left | right | along > ]
+
+    [ sequential_cor:  { output in .cor text file }
+        bin_range: <3> to <40> ]  { starting from 1, inclusive }
+
+    [ ascii:           { output in .sub text file } 
+	[ minimum_percent= <0.50> ] { %ensembles in time range with good data }
+        end ]                       { less than this, mean U/V is set to 99999 }
+
+    [ statistics:      { output in .sta text file }
+        [ mean ]
+        [ variance ]
+        [ extrema ]
+        [ norm_extrema ]
+        [ indices ]
+        [ all ]
+        units= <0.01>
+        end ]
+
+    [ flag_mask:
+        < bit-mask > { bit-mask is any one or more of those defined in
+        .              adcpmask.h; these cumulatively indicate which
+        .              criteria to consider in flagging profile bins
+        .              as bad prior to calculations.  Use this option
+        end ]          if you want flagging other than the default ALL_BITS }
+
+    end
+
+  {time_ranges:          one of the following }
+    
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+-----------------------------------------------------------------------------*/
+
+  dbname:            ../adcpdb/ademo
+  output:            sepc        /* must be <= 5 chars. for DOS */
+  step_size:         1
+  ndepth:            58
+  time_ranges:       separate
+  year_base=         1993
+
+  option_list:
+    pg_min=          30
+    reference:       final_ship_ref
+    regrid:          centered_average
+                     depth
+      grid number=   45
+        origin=      20
+        increment=   10
+    contour:         longitude  mean
+      minimum_npts=  3
+      units=         0.01
+    statistics:      all
+      units=         0.01
+      end
+    flag_mask:       ALL_BITS
+      end
+  end
+
+/* @../grid/ademo_se.lon */
+
+/*  Grid boundaries for:
+     dbname: ../adcpdb/ademo     output: ademo_se.lon     year_base: 1993     step_size: 1    
+     latitude      origin: -0.050000     increment: 0.100000    
+     longitude      origin: -0.050000     increment: 0.100000
+*/
+/* 
+ Time range: 93/04/10  07:36:00 to 93/04/10  23:58:00 */
+93/04/10  07:36:00  /*  13.535   -91.577,     99.31667 (begin time range) */to
+93/04/10  07:46:01  /*  13.522   -91.560,     99.32362;   10 min */
+93/04/10  07:51:02  /*  13.514   -91.549,     99.32711 */to
+93/04/10  08:26:01  /*  13.455   -91.472,     99.35140;   35 min */
+93/04/10  08:31:02  /*  13.447   -91.461,     99.35488 */to
+93/04/10  08:36:00  /*  13.438   -91.451,     99.35833;    5 min */
+93/04/10  08:41:01  /*  13.429   -91.440,     99.36182 */to
+93/04/10  09:21:03  /*  13.359   -91.353,     99.38962;   40 min */
+93/04/10  09:26:01  /*  13.350   -91.342,     99.39307 */to
+93/04/10  09:26:01  /*  13.350   -91.342,     99.39307;    0 min */
+93/04/10  09:31:01  /*  13.342   -91.331,     99.39654 */to
+93/04/10  10:06:05  /*  13.279   -91.254,     99.42089;   35 min */
+93/04/10  10:11:01  /*  13.270   -91.243,     99.42432 */to
+93/04/10  10:21:01  /*  13.253   -91.221,     99.43126;   10 min */
+93/04/10  10:26:02  /*  13.244   -91.210,     99.43475 */to
+93/04/10  10:51:00  /*  13.201   -91.156,     99.45208;   25 min */
+93/04/10  10:56:02  /*  13.193   -91.145,     99.45558 */to
+93/04/10  11:21:01  /*  13.151   -91.090,     99.47293;   25 min */
+93/04/10  11:26:03  /*  13.142   -91.079,     99.47642 */to
+93/04/10  11:36:01  /*  13.126   -91.057,     99.48334;   10 min */
+93/04/10  11:41:00  /*  13.118   -91.046,     99.48681 */to
+93/04/10  12:21:02  /*  13.051   -90.958,     99.51461;   40 min */
+93/04/10  12:26:00  /*  13.043   -90.947,     99.51806 */to
+93/04/10  13:11:01  /*  12.968   -90.852,     99.54932;   45 min */
+93/04/10  13:16:01  /*  12.959   -90.842,     99.55279 */to
+93/04/10  13:21:01  /*  12.951   -90.832,     99.55626;    5 min */
+93/04/10  13:26:03  /*  12.942   -90.821,     99.55976 */to
+93/04/10  13:56:00  /*  12.892   -90.760,     99.58056;   30 min */
+93/04/10  14:01:00  /*  12.883   -90.750,     99.58403 */to
+93/04/10  14:16:01  /*  12.857   -90.719,     99.59446;   15 min */
+93/04/10  14:21:00  /*  12.849   -90.709,     99.59792 */to
+93/04/10  14:46:01  /*  12.808   -90.658,     99.61529;   25 min */
+93/04/10  14:51:02  /*  12.799   -90.647,     99.61877 */to
+93/04/10  15:16:00  /*  12.758   -90.596,     99.63611;   25 min */
+93/04/10  15:21:01  /*  12.750   -90.586,     99.63959 */to
+93/04/10  15:36:01  /*  12.726   -90.555,     99.65001;   15 min */
+93/04/10  15:41:00  /*  12.718   -90.545,     99.65347 */to
+93/04/10  16:21:00  /*  12.654   -90.463,     99.68125;   40 min */
+93/04/10  16:26:01  /*  12.645   -90.453,     99.68473 */to
+93/04/10  16:26:01  /*  12.645   -90.453,     99.68473;    0 min */
+93/04/10  16:31:02  /*  12.637   -90.443,     99.68822 */to
+93/04/10  17:15:59  /*  12.566   -90.353,     99.71943;   45 min */
+93/04/10  17:21:01  /*  12.558   -90.343,     99.72293 */to
+93/04/10  17:26:02  /*  12.550   -90.332,     99.72641;    5 min */
+93/04/10  17:31:00  /*  12.540   -90.319,     99.72986 */to
+93/04/10  17:51:02  /*  12.501   -90.261,     99.74377;   20 min */
+93/04/10  17:56:00  /*  12.491   -90.246,     99.74722 */to
+93/04/10  18:16:01  /*  12.454   -90.184,     99.76112;   20 min */
+93/04/10  18:21:00  /*  12.445   -90.168,     99.76458 */to
+93/04/10  18:26:01  /*  12.436   -90.152,     99.76807;    5 min */
+93/04/10  18:31:02  /*  12.427   -90.135,     99.77155 */to
+93/04/10  18:56:02  /*  12.382   -90.053,     99.78891;   25 min */
+93/04/10  19:01:00  /*  12.371   -90.038,     99.79236 */to
+93/04/10  19:06:02  /*  12.361   -90.023,     99.79586;    5 min */
+93/04/10  19:11:03  /*  12.350   -90.007,     99.79934 */to
+93/04/10  19:26:01  /*  12.318   -89.963,     99.80973;   15 min */
+93/04/10  19:31:01  /*  12.307   -89.948,     99.81321 */to
+93/04/10  19:56:00  /*  12.252   -89.874,     99.83056;   25 min */
+93/04/10  20:01:01  /*  12.241   -89.859,     99.83404 */to
+93/04/10  20:01:01  /*  12.241   -89.859,     99.83404;    0 min */
+93/04/10  20:06:01  /*  12.230   -89.844,     99.83751 */to
+93/04/10  20:37:11  /*  12.158   -89.755,     99.85916;   31 min */
+93/04/10  20:42:12  /*  12.147   -89.740,     99.86264 */to
+93/04/10  21:12:11  /*  12.075   -89.656,     99.88346;   30 min */
+93/04/10  21:17:09  /*  12.064   -89.641,     99.88691 */to
+93/04/10  21:22:11  /*  12.053   -89.626,     99.89041;    5 min */
+93/04/10  21:27:12  /*  12.042   -89.611,     99.89389 */to
+93/04/10  21:47:11  /*  11.996   -89.552,     99.90777;   20 min */
+93/04/10  21:52:11  /*  11.985   -89.538,     99.91124 */to
+93/04/10  22:02:12  /*  11.961   -89.509,     99.91819;   10 min */
+93/04/10  22:07:11  /*  11.949   -89.494,     99.92166 */to
+93/04/10  22:22:12  /*  11.914   -89.452,     99.93208;   15 min */
+93/04/10  22:27:11  /*  11.902   -89.438,     99.93554 */to
+93/04/10  22:47:12  /*  11.853   -89.381,     99.94944;   20 min */
+93/04/10  22:52:12  /*  11.840   -89.367,     99.95292 */to
+93/04/10  22:57:11  /*  11.828   -89.353,     99.95638;    5 min */
+93/04/10  23:02:11  /*  11.815   -89.339,     99.95985 */to
+93/04/10  23:27:11  /*  11.753   -89.269,     99.97721;   25 min */
+93/04/10  23:32:11  /*  11.740   -89.255,     99.98068 */to
+93/04/10  23:32:11  /*  11.740   -89.255,     99.98068;    0 min */
+93/04/10  23:37:12  /*  11.727   -89.242,     99.98417 */to
+93/04/10  23:57:12  /*  11.681   -89.184,     99.99806;   20 min (end time range) */
+

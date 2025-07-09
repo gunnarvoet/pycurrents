@@ -1,0 +1,134 @@
+/******************************************************************************
+
+    FILE:  profstat.cnt
+
+           This control file is used with the profstat program
+           to generate statistics on selected profiles in a CODAS database.
+
+           This particular version is used to obtain statistics for
+           profiles collected when the ship was on-station.
+
+  INPUT:  CODAS database
+  OUTPUT: 1. text file of profile statistics (.prs)
+          2. Matlab file of profile statistics (.mat)
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < root for output filename >
+  step_size:    < number of profiles to advance >
+  ndepth:       < number of depth bins to read and process>
+  time_ranges:  < combined | separate >
+
+  { one or more variable names, followed by various arguments as shown }
+  [ < variable name >
+      < "label" >                     { in quotes, for labelling the output }
+
+      [ reference:   < start bin > to  < end bin > ]
+      [ difference:  < 0 | 1 | 2 > ]     { for no, first, second difference }
+      [ statistics:  scale= < n > ]  { 0.01 for output in cm, 1.0 = m, etc. }
+      [ histogram:
+          nbins=     < n >
+          origin=    < n >
+          increment= < n >
+          style=     < h | c | n | cn > ]      { n = normalized display
+                                                 c = cumulative display
+                                                cn = cumulative & normalized
+                                                 h = neither }
+      [ flag_mask:
+          < bit-mask >  { bit-mask is any one or more of those defined in
+          .               profmask.h; these cumulatively indicate which criteria
+          .               to consider in flagging profile bins as bad prior to
+          .               calculations.  Default is ALL_BITS. }
+          end ]
+  end
+
+  { list of YMDHMS time pairs: }
+  < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+  .
+  .
+  or
+   @ademo_os.arr
+-----------------------------------------------------------------------------*/
+
+  dbname:        ../adcpdb/ademo
+  output:        ademo_os
+  step_size:     1
+  ndepth:        58
+  time_ranges:   combined
+
+  /* variables list: */
+  U
+    "U component, ADCP DEMO"
+    difference: 1
+    statistics: scale= 0.01
+    end
+  V
+    "V component, ADCP DEMO"
+    difference: 1
+    statistics: scale= 0.1
+    end
+  W
+    "W component, ADCP DEMO"
+    reference:  5 to 20
+    difference: 0
+    statistics: scale= 0.1
+    end
+  AMP_SOUND_SCAT
+    "AMPLITUDE, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    histogram: nbins= 12 origin= 20  increment= 20  style= nc
+    end
+  PERCENT_GOOD
+    "PERCENT GOOD, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    end
+  ERROR_VEL
+    "ERROR VELOCITY, ADCP DEMO"
+    difference: 0
+    statistics: scale= 0.1
+    flag_mask: ALL_BITS end
+    end
+  SPECTRAL_WIDTH
+    "SPECTRAL WIDTH, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    end
+  PERCENT_3_BEAM
+    "PERCENT 3 BEAM, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    end
+  BEAM_STATS
+    "BEAM STATISTICS, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    end
+  end
+
+/* append time ranges from arrdep arrdepos.cnt output explicitly
+or use the include file option "@ademo_os.arr": */
+/*
+ reference_file: ../nav/ademo.nav
+ output_file: ademo_os.arr
+ year_base= 1993
+ n_refs= 13
+ i_ref_l0= 1
+ i_ref_l1= 5
+ i_ref_r0= 7
+ i_ref_r1= 11
+ range: on_station
+ up_thresh= 2.500000
+ down_thresh= 2.500000
+ margin= 10.000000*/
+93/04/09  10:52:22  to  93/04/09  11:12:42  /*    98.45315 to    98.46704;  1200 s, depart */
+93/04/09  12:22:22  to  93/04/09  12:42:43  /*    98.51565 to    98.52955;  1201 s, arrive */
+93/04/09  14:42:22  to  93/04/09  15:02:42  /*    98.61287 to    98.62676;  1200 s, depart */
+93/04/09  16:12:23  to  93/04/09  16:32:42  /*    98.67538 to    98.68926;  1199 s, arrive */
+93/04/09  18:07:22  to  93/04/09  18:27:43  /*    98.75523 to    98.76913;  1201 s, depart */
+93/04/09  19:37:20  to  93/04/09  19:57:43  /*    98.81771 to    98.83163;  1203 s, arrive */
+93/04/09  23:47:22  to  93/04/10  00:07:43  /*    98.99134 to    99.00524;  1201 s, depart */
+93/04/10  01:17:23  to  93/04/10  01:37:40  /*    99.05385 to    99.06771;  1197 s, arrive */
+93/04/10  07:40:50  to  93/04/10  08:01:11  /*    99.32014 to    99.33404;  1201 s, depart */

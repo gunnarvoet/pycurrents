@@ -1,0 +1,43 @@
+/******************************************************************************
+
+  FILE:  llgrid.cnt
+
+         This control file is used with the llgrid program
+         to generate a text file of time ranges that roughly correspond to
+         longitude/latitude grid crossings.  The grid is specified as a
+         starting position and an increment for each dimension.
+
+  INPUT:  CODAS database
+  OUTPUT: text file of time ranges which can be appended to an adcpsect
+          control file to extract profile data for the desired sections
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:         < CODAS database name >
+  output:         < output filename >
+  step_size:      < profile sampling rate >               { 1 = every profile }
+  lat_origin:     < decimal degrees >
+  lat_increment:  < decimal degrees >
+  lon_origin:     < decimal degrees >
+  lon_increment:  < decimal degrees >
+  time_ranges:                            { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .
+    .
+  add_time_ranges:                                { list of YMDHMS time pairs }
+  skip_to:        < label >
+-----------------------------------------------------------------------------*/
+
+  dbname:        ../adcpdb/ademo
+  output:        ademo_se.lon
+  year_base:     1993
+  step_size:     1
+  lat_origin:    -0.05   /* center bins */
+  lat_increment:  0.10   /* grid by 1/10 degree latitude */
+  lon_origin:    -0.05
+  lon_increment:  0.10   /* and 1/10 degree longitude */
+  time_ranges:
+    93/04/10  07:36:00 to 93/04/10 23:58:00
+
+/*****************************************************************************/

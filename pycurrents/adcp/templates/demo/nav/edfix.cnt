@@ -1,0 +1,40 @@
+/******************************************************************************
+
+  FILE:  edfix.cnt
+
+         This control file is used with the edfix program
+         to edit out bad fixes from a text file of GPS and/or
+         Transit fixes according to certain quality parameters,
+         and to optionally merge Transit and GPS fixes into one file.
+
+  INPUT:  if editing GPS fixes, text file of GPS fixes
+          if editing Transit fixes, text file of Transit fixes
+          if merging while editing, both Transit and GPS fix files
+  OUTPUT: text file of fixes with bad ones commented out (% in first column)
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  output:              < output filename >
+  transit_file:        < input Transit fix filename | none >
+      min_elevation=   < min. allowed satellite elevation in degrees >
+      max_elevation=   < max. allowed satellite elevation in degrees >
+      max_iterations=  < max. allowed no. of iterations in calculation >
+      max_dr=          < max. distance to dead reckoned position >
+      time_since_gps=  < max. proximity to last GPS fix in decimal days >
+  gps_file:            < input GPS fix filename >
+      max_hdop=        < max. allowed horizontal dilution of precision >
+      time_since_3=    < max. proximity to last 3-satellite fix, decimal days >
+-----------------------------------------------------------------------------*/
+
+  output:              ademo.edf
+  transit_file:        ../scan/ademo.trs
+      min_elevation=   7
+      max_elevation=   70
+      max_iterations=  3
+      max_dr=          4.0
+      time_since_gps=  0.006
+  gps_file:            ademo.gps
+      max_hdop=        6
+      time_since_3=    0.25
+                                
+/*****************************************************************************/

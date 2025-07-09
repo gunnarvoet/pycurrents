@@ -1,0 +1,47 @@
+/******************************************************************************
+
+  FILE:  refabs.cnt
+
+         This control file is used with the refabs program
+         to calculate the raw absolute reference layer velocities.
+         Averaged between fixes, this is the difference between the
+         velocity of the ship over the ground, determined from the fixes,
+         and the velocity of ship relative to the reference layer velocity,
+         from the ADCP profiles.
+
+  INPUT:  text file of ship velocity relative to reference layer (adcpsect .nav)
+          text file of position fixes with bad fixes commented out
+  OUTPUT: text file with the following columns:
+          1. fix time (in decimal days)
+          2. longitude (in decimal degrees)
+          3. latitude (in decimal degrees)
+          4. zonal component of absolute reference layer velocity (in m/s)
+          5. meridional component of absolute reference layer velocity (in m/s)
+          6. fix interval (in minutes)
+          7. zonal velocity cumulated over gap (in m/s)
+          8. meridional velocity cumulated over gap (in m/s)
+          9. length of gap (in minutes)
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  fix_file_type:    < simple | HIG >               { format of input fix file }
+  reference_file:   < input file of relative ship velocity >  { adcpsect .nav }
+  fix_file:         < input file of position fixes >         { time, lon, lat }
+  output:           < output filename >
+  year_base=        < base year for decimal days >
+
+  ensemble_length=  < no. of seconds in ensemble >
+  gap_tolerance=    < maximum seconds discrepancy between profile & fix time >
+                                                 { allow a little, perhaps 10 }
+-----------------------------------------------------------------------------*/
+
+  fix_file_type:    simple
+  reference_file:   ademo.nav
+  fix_file:         ademo.ags
+  output:           ademo.ref
+  year_base=        1993
+
+  ensemble_length=  300                      /* 5-minute ensemble */
+  gap_tolerance=    10
+
+/*****************************************************************************/

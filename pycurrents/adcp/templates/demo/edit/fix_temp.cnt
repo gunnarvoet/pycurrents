@@ -1,0 +1,97 @@
+/******************************************************************************
+
+  FILE:  fix_temp.cnt
+
+         This control file is used with the fix_temp program
+         to implement a soundspeed correction for two possible
+    conditions set in the DAS by the start.cnf:
+
+    1) The DAS was set to calculate soundspeed using the
+    transducer temperature and a fixed salinity. Here one
+    compensates for errors in the soundspeed due to transducer
+    temperature errors.
+
+    2) The DAS was not set to calculate soundspeed from
+    the transducer temperature, but from a fixed soundspeed.
+         Here one can compensate for errors in manual input of
+    soundspeed to the DAS.
+
+
+ Fix_temp adjusts the transducer temperature and soundspeed used,
+ and recalculates all variables that have been calculated using the
+ the original soundspeed:
+         ancillary_1.snd_spd_used, U, V, W, and error velocities,
+ for timerange(s) in a CODAS database.
+
+ A temperature correction may be specified either as a constant offset
+ to be added to the original value, or the correct temperature itself,
+ replacing the original.
+
+
+  INPUT:  CODAS database
+  OUTPUT: CODAS database with corrected temperature, etc.
+
+     true_temperature = original_temp + offset_temperature
+
+   will be applied in velocity correction, where original_temp
+   is the temperature original recorded in the ping data file.
+
+                       Willa Zhu
+                       03-07-1990
+
+Modified Mon  07-09-1990  by EF; new parameter original_soundspeed
+is the soundspeed that was input to the DAS if the DAS was not set
+to calculate soundspeed from temperature, or 0 otherwise.  In the
+former case one can compensate for errors in manual input of
+soundspeed to the DAS; in the latter one compensates for errors in the
+soundspeed due to temperature errors.
+
+Modified to add offset_temperature input parameter (WZ, 06/10/91)
+
+Modified to allow temperature & salinity values to be provided
+in external text files of ADCP times and values (JR, 01/15/92)
+
+Modified documentation (JF, 97/05/22).
+
+Added true_soundspeed= option (EF, 00/06/09)
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:                < CODAS database name >
+  original_soundspeed=   < soundspeed that was input to the DAS if DAS was
+                           not set to calculate soundspeed from temperature >
+                         { set to 0 otherwise }
+  offset_temperature=    < no. of degrees to add to original temperature >
+                         { set to 0 if using true_temperature }
+  true_temperature=      < file of true temperatures at ADCP times >
+          {or}
+          <  a constant reasonable for the cruise >
+                         { either used only when offset_temperature is set to 0 }
+  true_salinity=   < either a constant reasonable for the cruise >
+          {or}
+          < file of true salinity interpolated to ADCP times >
+
+  true_soundspeed= <either a constant or a file of soundspeeds at ADCP times >
+
+  end                    { this 'end' must precede the time_ranges: list }
+  time_ranges:           { one of the following }
+    < all >     { or }
+          { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .
+          { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+-----------------------------------------------------------------------------*/
+
+  dbname:  ../adcpdb/ademo
+  original_soundspeed=  1500.0    /* set to this value in DAS */
+  offset_temperature=  -1.3512    /* using CTD to correct the ADCP record */
+  true_salinity= corrsal.dat      /* interpolated from CTD stations */
+  end
+  time_ranges:
+   all
+  /* 93/04/09 00:02:00 to 93/04/10 23:58:00 */
+/*****************************************************************************/

@@ -1,0 +1,46 @@
+/******************************************************************************
+
+  FILE:  mkblkdir.cnt
+
+         This control file is used with the mkblkdir program
+         to generate a new CODAS database from a set of
+         CODAS block files.  The new database will consist of
+         a new block directory file and a copy of each input
+         block file, converted if necessary to the host machine
+         format.  Note that the list of input block files should
+         NOT include the directory block file.
+
+  INPUT:  1. CODAS block files (*.blk)
+          2. producer definition file, if needed (that is, if
+	     options DATASET_ID and BLOCK_DIR_TYPE are not
+	     specified and the default values are not applicable)
+          3. structure definition file, if needed (that is, if the
+             data structures in the block files are not defined therein)
+  OUTPUT: CODAS database
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  [ DB_NAME        < output CODAS database name >
+  [ PRD_NAME       < input producer definition filename > ]
+                   < CODAS is case sensitive, we recommend keeping filenames as 
+                     lowercase letters >
+  [ DATASET_ID     < 8-char or less instrument name plus qualifiers, if any > 
+  [ BLOCK_DIR_TYPE < CODAS block directory type, only type 0 is currently available> ]
+  [ DESTINATION    < PC_COMPATIBLE_HOST | SUN3_COMPATIBLE_HOST | VAX_VMS_HOST >
+		     defaults to host environment, if not specified ]
+  end
+  [ SD_NAME        < input structure definition filename > ]
+  [ BLOCK_FILE     < input CODAS block filename > ]
+  .
+  .
+  .
+-----------------------------------------------------------------------------*/
+
+  DB_NAME     sunpc/ademo      
+  DESTINATION PC_COMPATIBLE_HOST 
+  end
+
+/*****************************************************************************/
+BLOCK_FILE ademo001.blk
+BLOCK_FILE ademo002.blk
+

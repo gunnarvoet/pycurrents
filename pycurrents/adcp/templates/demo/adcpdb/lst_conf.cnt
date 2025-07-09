@@ -1,0 +1,36 @@
+/******************************************************************************
+
+  FILE:  lst_conf.cnt
+
+         This control file is used with the lst_conf program
+         to extract the history of the configuration settings
+         from a CODAS database into a text file.
+
+  INPUT:  CODAS database
+  OUTPUT: text file
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < output filename >
+  step_size=    < number of profiles to advance >
+  year_base=    < base year for decimal day conversions >
+  time_ranges:           { one of the following }
+    < all >              { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+    
+-----------------------------------------------------------------------------*/
+
+  dbname:      ademo
+  output:      ademo.cnh
+  time_ranges:
+     all
+   /* 93/04/09 00:02:00 to 93/04/10 23:58:00 */
+
+/*****************************************************************************/

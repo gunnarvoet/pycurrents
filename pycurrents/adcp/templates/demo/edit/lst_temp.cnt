@@ -1,0 +1,45 @@
+/******************************************************************************
+
+  FILE:  lst_temp.cnt
+
+         This control file is used with the lst_temp program
+         to retrieve temperature and soundspeed data for selected
+         profiles within the given time range(s) from a CODAS database.
+
+  INPUT:  CODAS database
+  OUTPUT: text file with the following columns:
+          1. profile time, in decimal days
+          2. transducer temperature, in degrees
+          3. last temperature, in degrees
+          4. soundspeed
+	  Matlab file with the same information as above plus:
+	  5. longitude
+	  6. latitude
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:           < input CODAS ADCP database name >
+  output:           < output filename >
+  step_size=        < profile sampling rate >
+  year_base=        < base year for decimal days >
+  time_ranges:           { one of the following }
+    <all>                { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    <@tr_filename>       { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+  
+-----------------------------------------------------------------------------*/
+
+  dbname:           ../adcpdb/ademo
+  output:           ademo.tem
+  step_size=        1
+  year_base=        1993
+  time_ranges:
+	all
+  /*  93/04/09 00:02:00 to 93/04/10 23:58:00  */
+
+/*****************************************************************************/

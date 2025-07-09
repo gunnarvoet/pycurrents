@@ -1,0 +1,27 @@
+/******************************************************************************
+
+  FILE:  put_txy.cnt
+
+         This control file is used with the put_txy program
+         to store the calculated profile positions and
+         ship velocity into a CODAS database.
+
+  INPUT:  CODAS database
+          text file of estimated positions and ship velocity for each profile
+  OUTPUT: CODAS database with profile positions and ship velocity
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:         < CODAS database name >
+  position_file:  < input text file of positions, etc. > { 3 columns: t,x,y}
+  year_base=      < base year for decimal days >
+  tolerance=      < max. allowed discrepancy between profile & fix time, sec >
+    end
+-----------------------------------------------------------------------------*/
+
+  dbname:         ../adcpdb/ademo
+  position_file:  ademo.gps
+  year_base=      1993
+  tolerance=      5
+
+/*****************************************************************************/

@@ -1,0 +1,64 @@
+/******************************************************************************
+
+  FILE:  rotate.cnt
+
+         This control file is used with the rotate program
+         to rotate and simultaneously apply an amplitude correction factor
+         to the water and bottom track velocities in a CODAS database.
+         It allows different rotation parameters to be used for
+         different profile ranges, and for the water and bottom track
+         velocities.  It also allows the rotation to be performed using
+         either a constant angle or one relative to the ship's heading.
+         The angle is specified counterclockwise from the gyro compass
+         forward axis (which should be aligned with the ship's keel) to
+         the transducer forward axis.
+
+  INPUT:  CODAS database
+  OUTPUT: 1. updated CODAS database
+          2. log file record of rotation run
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  DB_NAME:      < CODAS database name >
+  LOG_FILE:     < output log filename -- appended to if already existing >
+
+  { followed by one or more of the following _RANGE & OPTION_LIST specs: }
+
+  < BLOCK_RANGE: | TIME_RANGE: | DAY_RANGE: > < all | <start> to <end> >
+    OPTION_LIST:
+      < water_track: | bottom_track: | water_and_bottom_track: >
+	[ time_0=         < mean time in decimal days > ]
+	[ time_angle_file: < file of ADCP profile times and angles >
+	[ year_base=      < base year for time_0 > ]
+        [ angle_0=        < constant angle in degrees > ]
+        [ angle_1=        < coefficient of linear time term > ]
+        [ angle_2=        < coefficient of squared time term > ] 
+        [ angle_3=        < coefficient of cubic time term > ]
+        [ angle_sin_H=    < coefficient for sin of ship heading > ]
+        [ angle_cos_H=    < coefficient for cos of ship heading > ]
+        [ amplitude=      < amplitude of rotation > ]
+        [ rotate_only! ]  { otherwise, above values will be stored in database }
+        [ store_only! ]   { otherwise, velocities will be rotated }
+        [ unrotate! ]     { totally unrotate velocities }
+        end               { of rotation parameter option list }
+      .
+      .
+      .
+      end                 { of track list }
+  .
+  .                       { more BLOCK_ or TIME_ or DAY_RANGE: to process }
+  .
+-----------------------------------------------------------------------------*/
+
+  DB_NAME:                          ../../adcpdb/ademo
+  LOG_FILE:                         ademo.rot
+  TIME_RANGE:                       all
+    OPTION_LIST:
+      water_and_bottom_track:
+        time_angle_file:            gpscal.ang /* step 1:  gyro correction */
+        amplitude=                  1.00             /* step 2:  transducer offset */
+        angle_0=                    1.8              /* in degrees */
+        end
+      end
+
+/*****************************************************************************/

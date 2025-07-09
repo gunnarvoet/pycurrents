@@ -1,0 +1,38 @@
+/******************************************************************************
+
+  FILE:  getnav.cnt
+
+         This control file is used with the getnav program
+         to retrieve the navigation information for selected profiles
+         within the given time range(s) from a CODAS ADCP database.
+
+  INPUT:  CODAS database
+  OUTPUT: text file of profile times and positions
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:          < CODAS ADCP database name >
+  output:          < output filename >
+  step_size:       < profile sampling rate >
+  year_base=       < base year for decimal day conversions >
+  time_ranges:           { one of the following }
+    < all >              { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+  
+-----------------------------------------------------------------------------*/
+
+  dbname:           ../adcpdb/ademo
+  output:           ademo.fix
+  step_size:        1
+  year_base=        1993
+  time_ranges:
+    85/12/26  21:09:00 to   94/01/09  02:11:00
+
+/*****************************************************************************/

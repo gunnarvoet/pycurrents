@@ -1,0 +1,35 @@
+/******************************************************************************
+
+  FILE:  lst_prof.cnt
+
+         This control file is used with the lst_prof program
+         to produce a list of times and positions of selected
+         profiles within the given time range(s) from a CODAS database.
+
+  INPUT:  CODAS database
+  OUTPUT: text file of profile times and positions
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < output filename >
+  step_size:    < number of profiles to advance >
+  time_ranges:           { one of the following }
+    <all>                { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    <@tr_filename>       { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+-----------------------------------------------------------------------------*/
+
+  dbname:     ademo
+  output:     ademoprf.lst
+  step_size:  1
+  time_ranges:
+	all
+   /* 93/04/09 00:02:00 to 93/04/10 23:58:00 */
+
+/*****************************************************************************/

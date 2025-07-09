@@ -1,0 +1,95 @@
+/******************************************************************************
+
+  FILE:  timslip.cnt
+
+         This control file is used with the timslip program
+         to detect ship accelerations and turns from ship velocity,
+         as recorded by the ADCP, and from position fixes.  It can
+         be used to derive an estimate of the time difference between
+         the ADCP ensembles and the satellite time.  It also provides
+         estimates of the amplitude and phase of the transducer misalignment.
+
+  INPUT:  1. text file of ship velocity (.nav output from adcpsect)
+          2. text file of position fixes
+  OUTPUT: text file (.cal file) with the following columns:
+          1. jump direction (+/-1 = accel./decel.; +/-2 = turn right/left)
+          2. time of middle fix (in decimal days)
+          3. number of ensembles used
+          4. number of fixes used
+          5. change in zonal ship velocity
+          6. change in meridional ship velocity
+          7. variance of the reference layer velocity
+          8. minimized variance of the reference layer velocity
+          9. estimated time difference between fix and PC time (in seconds)
+         10. estimated amplitude
+         11. estimated phase (in degrees countercc from gyro to transducer)
+-----------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  fix_file_type:  < simple | HIG >
+  fix_file:       < input file of position fixes >
+  reference_file: < input file for ship velocity >
+  output_file:    < output filename >
+
+  year_base=      < year base for decimal day calculations >
+  min_n_fixes=    < minimum number of fixes for calculation
+                    of time shift to proceed > { normally the same as n_refs= }
+  n_refs=         < number of ensembles used in calculation of time shift >
+
+                  { The jump in velocity will be between indices (n_refs-1)/2
+                    and (n_refs-1)/2 +1.  For example, it will be between 6
+                    and 7 if n_refs is 13.  Note that all these indices start
+                    from 0, C-style, not from 1.  However, the lowest index
+                    specified must be >= 1, since the time of the start of
+                    ensemble 1 is (approximately) the time recorded with
+                    ensemble 0. }
+
+  i_ref_l0=       < index of first ensemble to use before jump > { min. is 1 }
+  i_ref_l1=       < index of last ensemble before jump >
+  i_ref_r0=       < index of first ensemble after jump >
+  i_ref_r1=       < index of last ensemble after jump >
+
+  up_thresh=      < about 1/2 underway speed > { for jump detection (m/s) }
+  down_thresh=    < about 1/2 underway speed > { for jump detection (m/s) }
+  turn_speed=     <2>  { min. speed (m/s) for turn detection }
+  turn_thresh=    <60> { magnitude of course difference (deg) for turn detect. }
+
+  dtmax=          < ensemble length + some >  { max. seconds between ensembles,
+                                                               to screen gaps }
+  tolerance=      <5.e-5> { days (about 5 secs) tolerance for iterative timslip calc. }
+  grid:           < fix | ensemble >     { calculate reference layer velocities
+                                           averaged between fix times,
+                                           or over ensemble intervals }
+  use_shifted_times?   < yes | no | fixed time shift in seconds >
+                             { use the best-fit time shift in the calibration }
+-----------------------------------------------------------------------------*/
+
+  fix_file_type:      simple
+  fix_file:           ../../nav/ademo.ags
+
+  reference_file:     ademorot.nav 
+  output_file:        ademo_9r.cal
+
+  year_base=          1993
+  min_n_fixes=        9 /* 5 7 9 */
+
+
+  n_refs=             9 /* 5 7 9 */
+
+  i_ref_l0=           1
+  i_ref_l1=           3 /* 1 2 3 */
+  i_ref_r0=           6 /* 4 5 6 */
+  i_ref_r1=           8 /* 4 6 8 */
+
+  up_thresh=          3.0          /* m/s */
+  down_thresh=        3.0          /* m/s */
+  turn_speed=         2.0          /* m/s */
+  turn_thresh=        60           /* degrees */
+
+  dtmax=              360          /* seconds, for 300-second ensembles */
+  tolerance=          5.e-5        /* days, about 5 seconds */
+  grid:               ensemble
+
+  use_shifted_times?  no
+
+/*****************************************************************************/

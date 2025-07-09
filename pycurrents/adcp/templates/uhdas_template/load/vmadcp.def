@@ -1,0 +1,163 @@
+/******************************************************************************
+
+-----------------------------------------------------------------------------*/
+
+DATASET_ID         ADCP-VM    /* vessel-mounted ADCP */
+PRODUCER_ID        31026N0001 /* 31 = USA, 02 = WHOI, 6N = Knorr */
+BLOCK_DIR_TYPE     0
+PROFILE_DIR_TYPE   3          /* time, position, and depth range keys */
+/*
+        DATA DEFINITION FOR ADCP DATA
+
+frequency     id value_type  data_name         offset  scale  units
+*/
+BLOCK_VAR      0  FLOAT     DEPTH                0       1       m
+UNUSED         1  USHORT    TEMPERATURE          -10     1.E-3   C
+UNUSED         2  USHORT    SALINITY             0       1.E-3   ppt
+UNUSED         3  USHORT    OXYGEN               0       1.E-3   ppt
+UNUSED         6  STRUCT    OPTICS               0       1       none
+PROFILE_VAR    7  UBYTE     AMP_SOUND_SCAT       0       1       none
+PROFILE_VAR    8  SHORT     U                    0       1.E-3   m/s
+PROFILE_VAR    9  SHORT     V                    0       1.E-3   m/s
+UNUSED        10  SHORT     P                    0       1       dbar
+UNUSED        11  STRUCT    TEMP_SAMPLE          0       1       none
+UNUSED        12  USHORT    SALINITY_SAMPLE      0       1.E-3   ppt
+UNUSED        13  USHORT    OXYGEN_SAMPLE        0       1.E-3   ppt
+UNUSED        14  STRUCT    NUTRIENT_SAMPLE      0       1       none
+UNUSED        15  STRUCT    TRACER_SAMPLE        0       1       none
+UNUSED        20  SHORT     OCEAN_DEPTH          0       1       m
+UNUSED        21  STRUCT    WEATHER              0       1       none
+UNUSED        22  STRUCT    SEA_SURFACE          0       1       none
+PROFILE_VAR   32  CHAR      PROFILE_COMMENTS     0       1       none
+BLOCK_VAR     33  CHAR      BLOCK_COMMENTS       0       1       none
+PROFILE_VAR   34  UBYTE     PROFILE_FLAGS        0       1       none
+BLOCK_VAR     35  STRUCT    CONFIGURATION_1      0       1       none
+BLOCK_VAR     36  STRUCT    CONFIGURATION_2      0       1       none
+PROFILE_VAR   37  STRUCT    ANCILLARY_1          0       1       none
+PROFILE_VAR   38  STRUCT    ANCILLARY_2          0       1       none
+PROFILE_VAR   39  STRUCT    ACCESS_VARIABLES     0       1       none
+UNUSED        40  SHORT     DEPTH_SAMPLE         0       1       m
+UNUSED        41  USHORT    SIGMA_T              0       1.E-3   kg/m3
+UNUSED        42  USHORT    SIGMA_THETA          0       1.E-3   kg/m3
+UNUSED        43  USHORT    SIGMA_Z              0       1.E-3   kg/m3
+UNUSED        44  USHORT    SIGMA_2              0       1.E-3   kg/m3
+UNUSED        45  USHORT    SIGMA_4              0       1.E-3   kg/m3
+UNUSED        46  USHORT    SPEC_VOL_ANOM        0       1.E-9   m3/kg
+UNUSED        47  USHORT    THERMOSTERIC_ANOM    0       1.E-9   m3/kg
+UNUSED        48  SHORT     DYNAMIC_HEIGHT       0       1.E-3   dyn_m
+UNUSED        49  SHORT     BVF                  0       1.E-5   /s
+UNUSED        50  SHORT     SOUNDSPEED           1500    1.E-2   m/s
+UNUSED        51  SHORT     TIME_FROM_START      0       1       s
+UNUSED        52  USHORT    POTENTIAL_TEMP       -10     1.E-3   C
+UNUSED        53  FLOAT     CONDUCTIVITY         0       1       none
+PROFILE_VAR   54  SHORT     W                    0       1.E-3   m/s
+PROFILE_VAR   55  SHORT     ERROR_VEL            0       1.E-3   m/s
+PROFILE_VAR   56  UBYTE     PERCENT_GOOD         0       1       none
+PROFILE_VAR   57  UBYTE     PERCENT_3_BEAM       0       1       none
+PROFILE_VAR   58  UBYTE     SPECTRAL_WIDTH       0       1       none
+PROFILE_VAR   59  SHORT     U_STD_DEV            0       1.E-3   m/s
+PROFILE_VAR   60  SHORT     V_STD_DEV            0       1.E-3   m/s
+PROFILE_VAR   61  SHORT     W_STD_DEV            0       1.E-3   m/s
+PROFILE_VAR   62  SHORT     EV_STD_DEV           0       1.E-3   m/s
+PROFILE_VAR   63  BYTE      AMP_STD_DEV          0       1       none
+PROFILE_VAR   64  SHORT     RAW_DOPPLER          0       1       none
+PROFILE_VAR   65  UBYTE     RAW_AMP              0       1       none
+PROFILE_VAR   66  UBYTE     RAW_SPECTRAL_WIDTH   0       1       none
+PROFILE_VAR   67  UBYTE     BEAM_STATS           0       1       none
+PROFILE_VAR   68  STRUCT    NAVIGATION           0       1       none
+PROFILE_VAR   69  STRUCT    BOTTOM_TRACK         0       1       none
+UNUSED        70  SHORT     U_LOG                0       1.E-3   m/s
+UNUSED        71  SHORT     V_LOG                0       1.E-3   m/s
+PROFILE_VAR   75  STRUCT    USER_BUFFER          0       1       none
+PROFILE_VAR   76  STRUCT    ADCP_CTD             0       1       none
+PROFILE_VAR   80  FLOAT     RESID_STATS          0       1       m/s
+PROFILE_VAR   81  FLOAT     TSERIES_STATS        0       1       m/s
+PROFILE_VAR   82  FLOAT     TSERIES_DIFFSTATS    0       1       m/s
+
+
+/*
+     STRUCTURE DEFINITIONS
+*/
+DEFINE_STRUCT  CONFIGURATION_1  23
+  ELEM         1  FLOAT     avg_interval                         s
+  ELEM         1  SHORT     compensation                         none
+  ELEM         1  SHORT     num_bins                             none
+  ELEM         1  FLOAT     tr_depth                             m
+  ELEM         1  FLOAT     bin_length                           m
+  ELEM         1  FLOAT     pls_length                           m
+  ELEM         1  FLOAT     blank_length                         m
+  ELEM         1  FLOAT     ping_interval                        s
+  ELEM         1  SHORT     bot_track                            none
+  ELEM         1  SHORT     pgs_ensemble                         none
+  ELEM         1  SHORT     ens_threshold                        none
+  ELEM         1  SHORT     ev_threshold                         mm/s
+  ELEM         1  FLOAT     hd_offset                            deg
+  ELEM         1  FLOAT     pit_offset                           deg
+  ELEM         1  FLOAT     rol_offset                           deg
+  ELEM         1  FLOAT     unused1                              none
+  ELEM         1  FLOAT     unused2                              none
+  ELEM         1  FLOAT     unused3                              none
+  ELEM         1  FLOAT     freq_transmit                        Hz
+  ELEM         1  SHORT     top_ref_bin                          none
+  ELEM         1  SHORT     bot_ref_bin                          none
+  ELEM         1  FLOAT     unused4                              none
+  ELEM         1  FLOAT     heading_bias                         deg
+
+DEFINE_STRUCT ANCILLARY_1 10
+  ELEM         1  FLOAT     tr_temp                              C
+  ELEM         1  FLOAT     snd_spd_used                         m/s
+  ELEM         1  FLOAT     best_snd_spd                         m/s
+  ELEM         1  FLOAT     mn_heading                           deg
+  ELEM         1  SHORT     pgs_sample                           none
+  ELEM         1  SHORT     unassigned1                          none
+  ELEM         1  SHORT     unassigned2                          none
+  ELEM         1  SHORT     unassigned3                          none
+  ELEM         1  SHORT     unassigned4                          none
+  ELEM         1  SHORT     unassigned5                          none
+
+DEFINE_STRUCT ANCILLARY_2 23
+  ELEM         1  FLOAT     watrk_hd_misalign                    deg
+  ELEM         1  FLOAT     watrk_scale_factor                   none
+  ELEM         1  FLOAT     botrk_hd_misalign                    deg
+  ELEM         1  FLOAT     botrk_scale_factor                   none
+  ELEM         1  FLOAT     pit_misalign                         deg
+  ELEM         1  FLOAT     rol_misalign                         deg
+  ELEM         1  FLOAT     unused1                              none
+  ELEM         1  FLOAT     last_temp                            C
+  ELEM         1  FLOAT     last_heading                         deg
+  ELEM         1  FLOAT     last_pitch                           deg
+  ELEM         1  FLOAT     last_roll                            deg
+  ELEM         1  FLOAT     mn_pitch                             deg
+  ELEM         1  FLOAT     mn_roll                              deg
+  ELEM         1  FLOAT     std_temp                             C
+  ELEM         1  FLOAT     std_heading                          deg
+  ELEM         1  FLOAT     std_pitch                            deg
+  ELEM         1  FLOAT     std_roll                             deg
+  ELEM         1  SHORT     ocean_depth                          m
+  ELEM         1  SHORT     max_amp_bin                          none
+  ELEM         1  SHORT     last_good_bin                        none
+  ELEM         1  SHORT     unused2                              none
+  ELEM         1  SHORT     unused3                              none
+  ELEM         1  SHORT     unused4                              none
+
+DEFINE_STRUCT  ACCESS_VARIABLES  8
+  ELEM         1  SHORT     first_good_bin                       none
+  ELEM         1  SHORT     last_good_bin                        none
+  ELEM         1  FLOAT     U_ship_absolute                      m/s
+  ELEM         1  FLOAT     V_ship_absolute                      m/s
+  ELEM         1  SHORT     user_flag_1                          none
+  ELEM         1  SHORT     user_flag_2                          none
+  ELEM         1  SHORT     user_flag_3                          none
+  ELEM         1  SHORT     user_flag_4                          none
+
+DEFINE_STRUCT  BOTTOM_TRACK  3
+  ELEM         1  FLOAT     u                                    m/s
+  ELEM         1  FLOAT     v                                    m/s
+  ELEM         1  FLOAT     depth                                m
+
+DEFINE_STRUCT  NAVIGATION 4
+  ELEM         1  DOUBLE   latitude                              deg
+  ELEM         1  DOUBLE   longitude                             deg
+  ELEM         1  DOUBLE   speed                                 knots
+  ELEM         1  DOUBLE   direction                             deg
+

@@ -1,0 +1,20 @@
+
+DEFINE_STRUCT  USER_BUFFER  5
+  ELEM         1  SHORT    version                               none
+  ELEM         1  SHORT    n_samples                             none
+  ELEM         1  SHORT    s_added                               none
+  ELEM         1  SHORT    spare                                 none
+  ELEM         2  STRUCT   fix                                   none
+
+DEFINE_STRUCT  fix      9
+  ELEM         1  LONG     pc_seconds                            s
+  ELEM         1  LONG     gps_seconds                           s
+  ELEM         1  DOUBLE   latitude                              deg
+  ELEM         1  DOUBLE   longitude                             deg
+  ELEM         1  FLOAT    height                                m
+  ELEM         1  BYTE     dop                                   none
+  ELEM         1  BYTE     nsat                                  none
+  ELEM         1  BYTE     msg_type                              none
+  ELEM         1  BYTE     spare                                 none
+
+

@@ -1,0 +1,44 @@
+/******************************************************************************
+
+  FILE:  lst_btrk.cnt
+
+         This control file is used with the lst_btrk program
+         to extract the bottom track velocity data within the
+         specified time range(s) from a CODAS database into a text file.
+
+  INPUT:  CODAS database
+  OUTPUT: text file with the following columns:
+          1. profile time (in decimal days)
+          2. zonal ship velocity over the ground (in m/s)
+          3. meridional ship velocity over the ground (in m/s)
+          4. bottom depth (in meters)
+          An entry with just a '%' in the first column signifies a gap of
+          one or more profiles for which no bottom track data were available.
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < output filename >
+  step_size=    < number of profiles to advance >
+  year_base=    < base year for decimal days >
+  time_ranges:           { one of the following }
+    < all >              { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+-----------------------------------------------------------------------------*/
+
+  dbname:     ../../adcpdb/ademo
+  output:     ademo.btm
+  step_size=  1
+  year_base=  1993
+  time_ranges:
+	all
+  /*  93/04/09 00:02:00 to 93/04/10 23:58:00 */
+
+/*****************************************************************************/

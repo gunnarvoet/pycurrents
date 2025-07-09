@@ -1,0 +1,107 @@
+/******************************************************************************
+
+  FILE:  adcpsect.cnt
+
+  This control file is used with the adcpsect program
+  to extract ADCP data for specified sections along a cruise track
+  from a CODAS database, perform the desired calculations,
+  and write the result to text and Matlab files.
+  The sections are specified as time ranges.
+
+  This particular version is used to extract the ship velocity relative to 
+  the reference layer.  Only those options used in this example are 
+  described in this control file. NOTE: a more verbose control file example 
+  with all possible options listed and a longer explantation of the output
+  exists in ../nav/adcpsect.cnt
+
+  INPUT:  
+     CODAS database
+  OUTPUT: 
+     1. text file (.nav file) with following columns:
+          a. profile time (in decimal days)
+          b. zonal velocity relative to reference layer (in m/s)
+          c. meridional velocity relative to reference layer (in m/s)
+     2. text file of statistics--mean (.sta file)
+     3. Matlab files
+          a. _uv.mat contains array "uv" with two columns for each ensemble,
+             first u and then v.  The row corresponds to the depth grid.
+          b. _xy.mat contains array "xyt" with a column for each ensemble,
+             and three rows: longitude, latitude, decimal day;
+             and vectors "z" and "zc" with the depth grid and the grid
+             interval centers, respectively. 
+-----------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < output filename >
+  step_size:    < number of profiles to advance >
+  ndepth:       < number of depth bins to read and process >
+  time_ranges:  < combined or separate >
+  year_base=    < base year for decimal days >
+
+  option_list:
+    [ pg_min=      <30> ]
+
+    [ navigation:      { output in .nav text file }
+                       { choose one or more of the ff. then 'end' }
+        [reference_bins <5> to <20>] {bin range; first bin is 1}
+        [final_ship_ref]
+        [nav_position]
+        [nav_velocity]
+        [bottom_track]
+        [dir_position]
+        end ]
+    [ statistics:      { output in .sta text file }
+        [ mean ]
+        [ variance ]
+        [ extrema ]
+        [ norm_extrema ]
+        [ indices ]
+        [ all ]
+        units= <0.01>
+        end ]
+
+    [ flag_mask:
+        < bit-mask > { bit-mask is any one or more of those defined in
+        .              adcpmask.h; these cumulatively indicate which
+        .              criteria to consider in flagging profile bins
+        .              as bad prior to calculations.  Use this option
+        end ]          if you want flagging other than the default ALL_BITS }
+
+    end
+
+  time_ranges:           { one of the following }
+    < all >              { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+-----------------------------------------------------------------------------*/
+
+  dbname:             ../../adcpdb/ademo
+  output:             ademoraw      /* must be <= 5 chars. for DOS */
+  step_size:          1             /* must be 1 for navigation/calibration */
+  ndepth:             20
+  time_ranges:        separate
+  year_base=          1993
+
+  option_list:
+    pg_min=           30
+    navigation:
+      reference_bins  5  to   20
+      end
+    statistics:       mean
+      units=          0.01       /* cm/s instead of default m/s */
+      end
+    flag_mask:        ALL_BITS
+      end
+    end
+
+	all
+/*  93/04/09 00:02:00 to 93/04/10 23:58:00 */
+
+/*****************************************************************************/

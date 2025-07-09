@@ -1,0 +1,8 @@
+include pycurrents/data/src/*.pyx
+include pycurrents/data/src/*.pxd
+include pycurrents/data/nmea/src/*.pyx
+include pycurrents/ladcp/src/*.pyx
+include pycurrents/num/src/*.pyx
+include pycurrents/num/src/*.pxi
+include pycurrents/adcp/src/*.pyx
+include pycurrents/file/src/*.pyx

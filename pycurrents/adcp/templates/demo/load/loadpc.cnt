@@ -1,0 +1,68 @@
+/******************************************************************************
+
+  FILE:  loadping.cnt
+
+         This control file is used with the loadping program
+         to load ADCP data from ping files into a CODAS database.
+ 
+  INPUT:  1. ping file(s)
+          2. producer definition file
+  OUTPUT: 1. CODAS ADCP database (.blk files)
+          2. log file, if requested
+  NOTE:   1. It is alright to load the ping files incrementally into the same
+             CODAS database, running loadping to load a few of them at a time.
+          2. Make sure that the case does not arise where a CODAS block file
+             has a time range that overlaps another block file (this occurs
+             when the ping files are not listed/loaded in chronological order
+             and both NEW_BLOCK_AT_FILE? and NEW_BLOCK_AT_HEADER? are set to
+             'no').  In such cases, searching by time for profiles that fall
+             within the overlap will check the earlier of the overlapping
+             blocks ONLY.
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  DATABASE_NAME:            < CODAS database name >
+  DEFINITION_FILE:          < input producer definition file >
+  OUTPUT_FILE:              < output filename | none >
+  MAX_BLOCK_PROFILES:       < maximum no. of profiles per block <= 400 >
+  NEW_BLOCK_AT_FILE?        < yes | no > { start new block for each ping file }
+  NEW_BLOCK_AT_HEADER?      < yes | no > { start new block for each header }
+  NEW_BLOCK_TIME_GAP(min):  < n >  { start new block when gap > n minutes }
+                                   { n must be <= 32767 }
+  PINGDATA_FILES:           { list pingdata files from next line }
+    < input ping filename > { followed by 0 or more instances of the ff.: }
+        [ time_correction:
+            start_header_number:  < header # to start time correction >
+            correct_time:         < correct GMT time >
+				     { format:  yy/mm/dd-hh:mi:se } 
+                                     { note the dash in the middle }
+            PC_time:              < PC recorded time >
+				     { format:  yy/mm/dd-hh:mi:se } 
+                                     { note the dash in the middle }
+            clock_rate:           < PC-to-GMT clockspeed ratio > ]
+        [ skip_header_range:      < header # > to < header # > ] { don't load }
+        [ skip_profile_range:
+            hdr=                  < header # >
+            prof=                 < profile # > to < profile # > ]
+            end
+    .
+    .
+    .
+-----------------------------------------------------------------------------*/
+
+  DATABASE_NAME:            ../adcpdb/pc/ademo
+  DEFINITION_FILE:          ../adcpdb/ademo.def
+  OUTPUT_FILE:              ademo.lod
+  MAX_BLOCK_PROFILES:       400
+  NEW_BLOCK_AT_FILE?        yes
+  NEW_BLOCK_AT_HEADER?      no
+  NEW_BLOCK_TIME_GAP(min):  30
+
+  PINGDATA_FILES:
+../ping/pingdata.000
+  skip_header_range:        7 to 8
+  skip_header_range:        75 to 76
+  skip_header_range:        290 to 291
+  end                    
+../ping/pingdata.001
+  end

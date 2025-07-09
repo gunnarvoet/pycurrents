@@ -1,0 +1,178 @@
+/******************************************************************************
+
+  FILE:  adcpsect.cnt
+
+  This control file is used with the adcpsect program
+  to extract ADCP data for specified sections along a cruise track
+  from a CODAS database, perform the desired calculations,
+  and write the result to text and Matlab files.
+  The sections are specified as time ranges.
+
+  This particular version is used to extract
+  the ship velocity relative to the reference layer.
+
+  This is also the most verbose version of the documentation and contains 
+  all the options possible as well as a longer description of the matlab 
+  output.
+
+  INPUT:  
+     CODAS database
+  OUTPUT: 
+     1. text file (.nav file) with following columns:
+          a. profile time (in decimal days)
+          b. zonal velocity relative to reference layer (in m/s)
+          c. meridional velocity relative to reference layer (in m/s)
+     2. text file of statistics--mean (.sta file)
+     3. Matlab files
+          a. _uv.mat contains array "uv" with two columns for each ensemble,
+             first u and then v.  The row corresponds to the depth grid.
+          b. _xy.mat contains array "xyt" with a column for each ensemble,
+             and three rows: longitude, latitude, decimal day;
+             and vectors "z" and "zc" with the depth grid and the grid
+             interval centers, respectively. (NOTE: When no depth regridding
+             is done, these vectors are filled with zeros and the "number
+             of depths" in the uv variable will be ndepth + 1. The first
+             row (depth) in uv will be filled with NaNs and should be 
+             ignored. Row two has the first actual bin depth. 
+     
+             Determining depths with no regridding: DAS recorded bins depths 
+             can be seen using showdb, or by using the following formula: 
+             z=tr_depth + blank_length + (bin_length + pls_length)/2 +
+                      bin_length*[0:num_bins-1] 
+             Typical values of xducer_depth (5m), blank_length (4m), 
+             bin_length (8m), pls_length (16m) may be found in 
+             CONFUGURATION_1 in showdb.  This example would yield center 
+             depths of z=[5+4+12:8:end] or [21:8:end].
+------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < output filename >
+  step_size:    < number of profiles to advance >
+  ndepth:       < number of depth bins to read and process >
+  time_ranges:  < combined or separate or single >
+                  {"combined" averages all time ranges together;
+                   "separate" averages data within each time range;
+                   "single" causes output for each profile within 
+                    each time range, so there is no temporal averaging
+                    at all.}
+  year_base=    < base year for decimal days >
+
+  option_list:
+    [ verbose ]                      { prints debugging and auxiliary output }
+    [ underway?    < no | yes limit= <3> > ]                 { limit in m/s }
+    [ pg_min=      <30> ]
+    [ AGC_margin=  <10> ]
+
+    [ skew_limit:
+        agc_limit=  <100>
+        max_velocity_difference= <0.8> ]                               { m/s }
+
+    [ reference:       { choose only one of the following: }
+        < reference_bins <5> to <20> |
+          none |
+          final_ship_ref |
+          nav_position |
+          nav_velocity |
+          bottom_track |
+          dir_position > ]
+
+    [ navigation:      { output in .nav text file }
+                       { choose one or more of the ff. then 'end' }
+        [reference_bins <5> to <20>] {bin range; first bin is 1}
+        [final_ship_ref]
+        [nav_position]
+        [nav_velocity]
+        [bottom_track]
+        [dir_position]
+        end ]
+
+    [ rotate:  < ship_coordinates | n > ]
+        { where <n> is the angle in degrees, old x-axis to new x-axis }
+
+    [ ctd:
+        dbname:  < CODAS CTD database name > ]
+
+    [ regrid:
+        < integrate | interpolate | centered_average | average |
+          per_grid_interval >
+        < depth | svan | pot_svan | sigma_theta | sigma_t >
+          { one of the last 4 only if the ctd: option has been selected }
+        < grid      number= <50> origin= <16> increment= <8> |
+          grid_list number= < 5> boundaries: <20> <40> <60> <80> <100> > ]
+
+    [ contour:         { output in .con text file }
+        < latitude | longitude | time >
+        < middle | mean >
+        minimum_npts= <10>
+        units=        <0.01> ]
+
+    [ vector:          { output in .vec text file }
+        minimum_npts= <10> ]
+
+    [ transport:      { output in .trn text file and _tr.mat Matlab Mat-file }
+        minimum_npts= <10>
+        units=        <1.e6>                                 { for Sverdrups }
+        direction=    < all | left | right | along > ]
+
+    [ sequential_cor:  { output in .cor text file }
+        bin_range: <3> to <40> ]  { starting from 1, inclusive }
+
+    [ ascii:           { output in .sub text file }
+        [ minimum_percent= <0.50> ] {%ensembles in time range with good data }
+	end ]                       {less than this, mean U/V is set to 99999}
+
+    [ statistics:      { output in .sta text file }
+        [ mean ]
+        [ variance ]
+        [ extrema ]
+        [ norm_extrema ]
+        [ indices ]
+        [ all ]
+        units= <0.01>
+        end ]
+
+    [ flag_mask:
+        < bit-mask > { bit-mask is any one or more of those defined in
+        .              adcpflag.h; these cumulatively indicate which
+        .              criteria to consider in flagging profile bins
+        .              as bad prior to calculations.  Use this option
+        end ]          if you want flagging other than the default ALL_BITS }
+
+    end
+
+    { list time ranges: one of the following}
+    < all >              { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+----------------------------------------------------------------------------*/
+
+  dbname:             ../adcpdb/ademo
+  output:             ademo    /* must be <= 5 chars. for DOS */
+  step_size:          1        /* must be 1 for navigation */
+  ndepth:             20
+  time_ranges:        separate
+  year_base=          1993
+
+  option_list:
+    pg_min=           30
+    navigation:
+      reference_bins  5  to   20
+      end
+    statistics:       mean
+      units=          0.01       /* cm/s instead of default m/s */
+      end
+    flag_mask:        ALL_BITS
+      end
+    end
+
+	all
+  /* 93/04/09 00:02:00 to 93/04/10 23:58:00 */
+
+/****************************************************************************/

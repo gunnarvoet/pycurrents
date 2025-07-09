@@ -1,0 +1,74 @@
+/******************************************************************************
+
+   FILE:  ubprint.cnt
+
+          This control file is used with the ubprint program
+          to extract the fix information stored with the ADCP profiles
+          by the user-exit program in the user buffer and navigation
+          structures.  It recognizes several versions of the user buffer:
+          1020 & 1021, 1280 & 1281, 1320, 2240, 720, and 1920.
+
+  INPUT:  CODAS database
+  OUTPUT: one or more text or Matlab files, one for each variable requested
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:                < CODAS database name >
+  output:                < root for output filename >
+  step_size=             < number of profiles to advance >
+  year_base=             < base year for decimal days >
+  variables:             { one or more of the following, depending on type }
+    [ complete ]         { .ub = all user buffer information }
+
+                         { following options available only for type > 720 & <= 1320 }
+    [ TRANSIT_fix ]      { .trf = complete Transit fix information }
+    [ TRANSIT_summary ]  { .trs = columnar output of Transit fixes }
+
+                         { following option available only for type >= 1280 & 720 & 1920 }
+    [ GPS_summary ]      { .gps = GPS fixes at end of each ensemble }
+
+                         { following option available only for type >= 1320 & 720 & 1920 }
+    [ avg_GPS_summary ]  { .ags = average GPS fix at end & start of next ens. }
+
+                         { following options available only for type = 1320 }
+    [ GPS_cal ]          { .gcl = .ags + ave. ship-ref. velocity for calib. }
+    [ L_fix ]            { .lfx = GPS fixes at ensemble start, middle & end }
+
+                         { following option available only for type = 720 & 1920 & 2240 }
+    [ GPS_fix ]          { .gfx = all GPS fixes (usu. 1 at start & 1 at end) }
+
+                         { following option available only for type = 2240 }
+    [ raw2_message ]     { .mg2 = raw message 2 }
+
+                         { following options available only for type = 1920 }
+    [ GPS2_summary ]     { .gp2 = GPS fixes at end of each ensemble, second pair }
+    [ avg_GPS2_summary ] { .ag2 = average GPS fix at end & start of next ens., second pair }
+    [ GPS2_fix ]         { .gf2 = GPS fixes, 1 at start & 1 at end, second pair }
+    [ attitude ]         { .att = Ashtech attitude statistics }
+    [ attitude_mat ]     { .mat = same as attitude, but Matlab-formatted file }
+    [ position ]         { .maf = all 4 fixes to Matlab-formatted file }
+    end
+  time_ranges:           { one of the following }
+    < all >              { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+-----------------------------------------------------------------------------*/
+
+  dbname:        ../adcpdb/ademo
+  output:        ademo
+  step_size=     1
+  year_base=     1993
+  variables:
+    avg_GPS_summary
+    end
+  time_ranges:
+	all
+    /* 93/04/09 00:02:00 to 93/04/10 23:58:00 */
+
+/*****************************************************************************/

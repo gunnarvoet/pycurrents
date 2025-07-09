@@ -1,0 +1,61 @@
+/*  1320 USER BUFFER */
+
+DEFINE_STRUCT  USER_BUFFER  13
+  ELEM         1  SHORT    version                               none
+  ELEM         1  SHORT    max_avgs                              none
+  ELEM         1  SHORT    first_bin                             none
+  ELEM         1  SHORT    n_bins                                none
+  ELEM         4  SHORT    avg_uv                                mm/s
+  ELEM         1  SHORT    set                                   deg*E-1
+  ELEM         1  SHORT    drift                                 kts*E-2
+  ELEM         1  SHORT    position_source                       none
+  ELEM         1  SHORT    dr_time                               s
+  ELEM         3  STRUCT   avg_fix                               none
+  ELEM         1  STRUCT   fix                                   none
+  ELEM         1  LONG     time                                  s
+  ELEM         1  STRUCT   gps_status                            none
+
+DEFINE_STRUCT  avg_fix  3
+  ELEM         1  LONG     time                                  s
+  ELEM         1  LONG     longitude                             min*E-3
+  ELEM         1  LONG     latitude                              min*E-3
+
+DEFINE_STRUCT  fix  21
+  ELEM         1  SHORT    ref_u                                 mm/s
+  ELEM         1  SHORT    ref_v                                 mm/s
+  ELEM         1  SHORT    ref_count                             none
+  ELEM         1  SHORT    sat_id                                none
+  ELEM         1  LONG     pc_time                               s
+  ELEM         1  LONG     fix_time                              s
+  ELEM         1  LONG     lon                                   sec*E-2
+  ELEM         1  LONG     lat                                   sec*E-2
+  ELEM         1  LONG     antenna                               m*E-1
+  ELEM         1  SHORT    dr_dist                               nm*E-2
+  ELEM         1  SHORT    dr_dir                                deg*E-1
+  ELEM         1  SHORT    sigma_lon                             m
+  ELEM         1  SHORT    sigma_lat                             m
+  ELEM         1  BYTE     used                                  none
+  ELEM         1  BYTE     q1                                    none
+  ELEM         1  BYTE     q2                                    none
+  ELEM         1  BYTE     q3                                    none
+  ELEM         1  BYTE     elevation                             deg
+  ELEM         1  BYTE     iterations                            none
+  ELEM         1  BYTE     dop_count                             none
+  ELEM         1  BYTE     spare                                 none
+
+DEFINE_STRUCT  gps_status 14
+  ELEM         1  SHORT   received                               none
+  ELEM         1  BYTE    nsat                                   none
+  ELEM         1  BYTE    quality                                none
+  ELEM         3  BYTE    track_status[3]                        none
+  ELEM         1  BYTE    state                                  none
+  ELEM         1  BYTE    mode                                   none
+  ELEM         1  BYTE    hdop                                   none
+  ELEM         1  SHORT   dopN                                   none
+  ELEM         1  SHORT   dopE                                   none
+  ELEM         1  SHORT   dopV                                   none
+  ELEM         1  SHORT   OscBias                                m/s*E-1
+  ELEM         1  SHORT   V                                      Kts*E-2
+  ELEM         1  SHORT   U                                      Kts*E-2
+  ELEM         1  SHORT   altitude                               m*E-1
+

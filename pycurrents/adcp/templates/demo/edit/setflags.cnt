@@ -1,0 +1,49 @@
+/***************************************************************
+
+   SETFLAGS.C
+
+control file structure:
+
+     dbname:          { database name }
+     logname:         { logfile name; default is "setflags.log" }
+     pg_min:  [ 30 ]  { set PG_BIT wherever percent_good is less }
+     clear_range      { include this command to set the }
+                      { ACCESS_VARIABLES first_good_bin and last_good_bin }
+                      { back to original default: 1 and number of bins. }
+                      { PROFILE_FLAGS RANGE_BIT should also be cleared by }
+		      { including the clear_range_bit command below. }
+                      { This option should be rarely if ever needed. }
+     set_range_bit    { Include this command to set the RANGE_BIT }
+                      { to correspond to the range in ACCESS_VARIABLES. }
+                      { The following "clear_" commands all clear their }
+                      { respective bits in PROFILE_FLAGS. }
+     clear_range_bit
+     clear_glitch_bit
+     clear_pg_bit
+     clear_all_bits
+     clear_bad_profile
+  time_ranges:           { one of the following }
+    < all >              { or }
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+     end               { optional; required only if another }
+                       { set of commands will be included in }
+                       { the same control file.  If so, all }
+                       { necessary commands must be repeated; }
+                       { all variables are cleared except }
+                       { dbname: }
+
+
+****************************************************************/
+     dbname: ../adcpdb/ademo
+          pg_min:   30
+     set_range_bit
+     time_ranges:
+	all
+  /* 93/04/09 00:02:00 to 93/04/10 23:58:00 */

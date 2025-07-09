@@ -1,0 +1,65 @@
+/******************************************************************************
+
+  FILE:  flag.cnt
+
+         This control file is used with the flag program
+         to generate a list of "suspect" profiles in a CODAS database,
+         i.e., profiles that do not conform to the specified thresholds.
+
+         This particular version disables error velocity checking
+         (hence, the very large EV_THRESHOLD:); such checking is done under
+         a separate run because it uses a different PGOOD_THRESHOLD: setting.
+    
+  INPUT:  CODAS database
+  OUTPUT: 1. text file (.flg) of "suspect" profiles
+          2. text file (.ev) of profiles with bin numbers that fail the
+             error velocity check (should be empty in this case)
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  DB_NAME:           < CODAS database name >
+  OUTPUT:            < root for output filename >
+  START_BIN:         < smallest bin no. to include in W variance calculation >
+  AMP_THRESHOLD:     < maximum allowed amplitude gain over successive bins >
+  PGOOD_THRESHOLD:   < minimum percent good value for bins to be surveyed >
+  LENGTH_UNIT:       < scaling factor vs. meters for velocity thresholds >
+  W_VAR_THRESHOLD:   < maximum allowed W variance in (LENGTH_UNIT*m/s)^2 >
+  D2W_THRESHOLD:     < maximum allowed 2nd diff. of W in LENGTH_UNIT*m/s >
+  D2UV_THRESHOLD:    < maximum allowed 2nd diff. of U or V in LENGTH_UNIT*m/s >
+  EV_THRESHOLD:      < maximum allowed error velocity in LENGTH_UNIT*m/s >
+  FLAG_MASK:
+    < bit_mask >
+    .
+    .
+    .
+    end
+  time_ranges:           { one of the following }
+    < all >              { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+-----------------------------------------------------------------------------*/
+
+  DB_NAME:            ../adcpdb/ademo
+  OUTPUT:             ademo
+  START_BIN:          3
+  AMP_THRESHOLD:      10
+  PGOOD_THRESHOLD:    30
+  LENGTH_UNIT:        1e-3   /* in this case, 1e-3 => thresholds given in mm */
+  W_VAR_THRESHOLD:    700    /* in (mm/s)^2 */
+  D2W_THRESHOLD:      40     /* in mm/s */
+  D2U&D2V_THRESHOLD:  75     /* in mm/s */
+  EV_THRESHOLD:       70     /* in mm/s */
+  CLUSTER_GAP:        10
+  FLAG_MASK:
+    ALL_BITS         /* ignore bins already flagged for all possible reasons */
+    end
+  TIME_RANGE:
+    93/04/09 00:02:00 to 93/04/10 23:58:00
+
+/*****************************************************************************/

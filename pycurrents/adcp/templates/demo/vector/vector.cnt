@@ -1,0 +1,200 @@
+/*****************************************************************************
+
+  FILE:  vector.cnt
+
+         This control file is used with the vector program
+         to generate a plot of velocity vectors, cruise track,
+         and/or coastlines.
+
+  INPUT:  if plotting velocity vectors or cruise track,
+          one or more text files with the following columns:
+             1. longitude (in decimal degrees)
+             2. latitude (in decimal degrees)
+             and velocities in the case of velocity vectors:
+             3. u-component for a layer in the depth grid (in m/s)
+             4. v-component for a layer in the depth grid (in m/s)
+             .
+             .        { more u-v pairs for other layers in the depth grid }
+             .
+          if plotting coastlines, a text file of map coordinates:
+             1. longitude (in decimal degrees)
+             2. latitude (in decimal degrees)
+          The entry "-9999.0 -9999.0" separates land areas;
+          the entry "-8888.0 -8888.0" separates inland water areas;
+          see ./codas3/vecplot/mapfiles/*.map for examples.
+  OUTPUT: PostScript file 
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  { ---PLOT PLACEMENT--- }
+  [ new_page ]                  { starts a new page for plotting }
+  [ subplot:          < mni > ] { 3-digit number divides page into m by n 
+				  plotting areas, and specifies i as the 
+				  current plotting area; plots are numbered 
+				  sequentially across then down the page; 
+		                  default is 111 }
+  [ orientation:      < portrait | landscape > ]       { default is landscape }
+  [ top_margin:       < page margin in inches >    { default is 1.0 }
+  [ bottom_margin:    < " >                        { default is 1.0 }
+  [ left_margin:      < " >                        { default is 1.0 }
+  [ right_margin:     < " >                        { default is 0.5 }
+
+  { ---VECTOR PLOTTING OPTIONS--- }
+  [ vecfile:          < input filename for velocity data > ] { lon lat u v .. }
+  [ vecfiles:         < vecfile #1> [ < vecfile #2 > ... ] end ]
+  [ u_v_pair:         < n > ] { index of (u,v) pair to plot from velocity file}
+			                 { default is 0 = no velocity vectors }
+  [ cruise_track ]            { plot cruise track, default is no cruise track }
+
+  [ arrow:
+    [ scale:          < vector scale in cm/s per inch > ] { default: 100 cm/s }
+    [ headlength:     < arrowhead length in inches > ]     { default: .1 inch } 
+    [ min_headlength: < minimum arrowhead length in inches > ] { default is half
+			of headlength; velocities that scale to less than this
+			value get drawn as circles instead of vectors }
+    [ linewidth:      < pen weight in points > ]         { default: 0.6 point }
+    end ]
+
+  { ---MAP PLOTTING OPTIONS--- }
+  [ map:
+    [ file:           < input filename for map coords. > ]   { lon lat in deg }
+    [ linewidth:      < pen weight in points > ]         { default: 0.4 point }
+    [ shading:        < gray level for land areas > ]        { 0.0 = black to }
+                                                       { 1.0 = white, default }
+    end ]
+
+  { ---AXES CONTROL OPTIONS--- }
+  [ lon_range:           < start > to < end > by < tick-interval > ] { in deg }
+  [ lat_range:           < start > to < end > by < tick-interval > ]
+  [ axis:
+    [ font:              < PostScript font name > ]     { default: Times-Bold }
+    [ font_size:         < n points > ]                         { default: 10 }
+    [ linewidth:         < pen weight in points > ]       {default: 0.5 point }
+    [ decimal_place:     < m >,< n > ] { no. of decimal places on axes labels }
+    [ label_interval:    < m >,< n > ] { label every mth tick mark on lon. axis
+  			                  and every nth tick mark on lat. axis; 
+								 default is 1 }
+    [ scale:             < lon deg per inch > by < lat deg per inch > ]
+		         { default is maximum possible rectangular projection } 
+    [ origin:            < x >,< y > ] { plot orig. in inches from paper edge }
+                                   { default is centered within plotting area }
+    end ]
+  
+  { ---PLOT TITLES AND ANNOTATIONS--- }
+  [ main_title:       "< first  main title line >" ]       { the double quotes }
+  [ sub_title:        "< second main title line >" ]       { are needed!       }
+  [ plot_title:       "< plot or third title line >" ]
+
+  [ title_font:       < PostScript font name > ] { affects only succeeding }
+  [ title_font_size:  < no. of points > ]        { *_title: declarations }
+
+  [ label:
+    [ type:           < common | local > ]       { default is common }
+    [ text:           "< text to be printed >" ] { quotes are needed }
+    [ symbol:         < circle | square | delta | diamond | del | x | plus |
+		      filled_" |   "    |   "   |   "     |  " > ]
+    [ position:       < x >,< y > ]          { in lon,lat degrees }
+    [ justify:        < left | right | center > ] { default is left }
+    [ font:           < PostScript font name > ] {default is Helvetica }
+    [ font_size:      < in points > ]          { default is 12 }
+    [ symbol_size:    < in points > ]          { default is 2 }
+    end ]
+  [ clear_labels ]     { clear list of labels from preceding plot }
+
+  [ legend:
+    [ type:           <common or local> ]                   { default: common }  
+    [ position:       < x >, < y > ]    { in inches from plot origin, if local,
+				            else from paper origin, if common }
+                                  default: lower right corner of plot (local) / 
+								page (common) }
+    [ label:          "< scale label>" ]            { default: "Speed (cm/s)" }
+    [ length:         < length in cm/s > ]     { default: same as arrow scale }
+    [ font:           < PostScript font name > ]     { default: Times-Bold }
+    [ font_size:      < n points > ]                         { default: 10 }
+    [ linewidth:      < pen weight in points > ]       {default: 0.5 point }
+    end ]
+
+  [ time_stamp: ]      "< text to use for time stamp >" ] { default is 
+			   system date/time; set to "" to suppress time stamp }
+  [ annotation:        "< text to print below time stamp >" ] 
+		       { e.g., "University of Hawaii"; default is no annotation }
+
+  { ---OUTPUT OPTIONS---}
+  [ psfile:  < PostScript output filename > ]           { default is stdout }
+  [ make_plot | add_plot ] { start plot generation from foregoing options; 
+			     make_plot overwrites the output file, if it exists;
+			     add_plot appends to it }
+
+  { ---MISCELLANEOUS OPTIONS--- }
+  [ skip_to:          < label > ] { skips succeeding control file entries up to label } 
+
+-----------------------------------------------------------------------------*/
+
+  main_title:      "ADCP DEMO"
+  sub_title:       "April 9 to 10, 1993"
+  annotation:      "University of Hawaii"
+  label:
+    text:          "Central America"
+    font_size:     10
+    position:      -90.0, 14.25
+    justify:       center
+    end
+
+  lon_range:        -92.0 to  -89.0  by  0.5       /* tic every half-degree */
+  lat_range:         11.0 to   14.5  by  0.5
+  axis:
+    label_interval:  2,2                        /* label every other tic */
+    end
+
+  vecfile:         ademo.vec
+  psfile:          ademo.ps
+  map:
+    file:         /home/noio/programs/codas3/vecplot/mapfiles/world.map
+    shading:      0.95
+    end
+
+  orientation:     portrait
+
+  subplot:         221
+  plot_title:      "Layer:  21m to 25m"
+  u_v_pair:        1
+  make_plot
+
+  subplot:         222
+  plot_title:      "Layer:  25m to 75m"
+  u_v_pair:        2
+  add_plot
+
+  subplot:         223
+  plot_title:      "Layer:  75m to 125m"
+  u_v_pair:        3
+  add_plot
+
+  subplot:         224
+  plot_title:      "Layer:  125m to 175m"
+  u_v_pair:        4
+  add_plot
+
+  new_page
+
+  subplot:         221
+  plot_title:      "Layer:  175m to 225m"
+  u_v_pair:        5
+  add_plot
+
+  subplot:         222
+  plot_title:      "Layer:  225m to 275m"
+  u_v_pair:        6
+  add_plot
+
+  subplot:         223
+  plot_title:      "Layer:  275m to 325m"
+  u_v_pair:        7
+  add_plot
+
+  subplot:         224
+  plot_title:      "Layer:  325m to 375m"
+  u_v_pair:        8
+  add_plot
+
+/*****************************************************************************/

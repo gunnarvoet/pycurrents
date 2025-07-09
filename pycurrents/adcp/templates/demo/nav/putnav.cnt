@@ -1,0 +1,36 @@
+/******************************************************************************
+
+  FILE:  putnav.cnt
+
+         This control file is used with the putnav program
+         to store the calculated profile positions and
+         ship velocity into a CODAS database.
+
+  INPUT:  CODAS database
+          text file of estimated positions and ship velocity for each profile
+  OUTPUT: CODAS database with profile positions and ship velocity
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:         < CODAS database name >
+  position_file:  < input text file of positions, etc. > { output of smoothr }
+  year_base=      < base year for decimal days >
+  tolerance=      < max. allowed discrepancy between profile & fix time, sec >
+  navigation_sources:  { one or more of the following }
+    [ gps ]
+    [ transit ]
+    [ loran ]
+    [ omega ]
+    [ radar ]
+    end
+-----------------------------------------------------------------------------*/
+
+  dbname:         ../adcpdb/ademo
+  position_file:  ademo.sm
+  year_base=      1993
+  tolerance=      5
+  navigation_sources:
+    gps
+    end
+
+/*****************************************************************************/

@@ -1,0 +1,51 @@
+/******************************************************************************
+
+  FILE:  scanping.cnt
+
+         This control file is used with the scanping program
+         to scan ADCP ping files and generate a list of profile times
+         (and fix times if available), variables recorded (if requested),
+         and bad headers and profiles encountered while scanning.
+
+  INPUT:  1. ping file(s)
+          2. user buffer definition file, if requesting user buffer output and
+             type is not ascii, 1020, 1021, 1280, 1281, 1320, 720, 2240, or 1920
+             or program is not being run on a PC
+  OUTPUT: 1. text file listing headers, profiles, variable names
+          2. if user buffer is type 1020, 1280, 1281 or 1320, and
+             user buffer output is requested, a text file summary of
+             Transit fixes (.trs):
+             a. fix time (in decimal days)
+             b. longitude
+             c. latitude
+             d. satellite elevation
+             e. number of iterations
+             f. distance to dead-reckoned position
+             g. flag indicating if fix was accepted by navigator (1 = true)
+             h. difference between PC and satellite time (in seconds)
+          3. if user buffer is type ASCII or other and user buffer output
+             is requested, a text file of the user buffer contents
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  OUTPUT_FILE:       < log output filename >
+  SHORT_FORM:        < yes | no >  { yes = list vars. recorded for each header }
+  UB_OUTPUT_FILE:    < user buffer output filename | none >
+  USER_BUFFER_TYPE:  < none | 1280 | 1020 | 1320 | 1281 | 1021 | 720 | 2240 | 1920 | ascii | other >
+  UB_DEFINITION:     < user buffer definition file name | none >
+  PINGDATA_FILES:
+    < input ping filename >
+    .
+    .
+    .
+-----------------------------------------------------------------------------*/
+
+  OUTPUT_FILE:         ademo.scn
+  SHORT_FORM:          yes
+  UB_OUTPUT_FILE:      none
+  USER_BUFFER_TYPE:    720
+  UB_DEFINITION:       ub_720.def
+  PINGDATA_FILES:
+../ping/pingdata.000
+../ping/pingdata.001
+/*****************************************************************************/

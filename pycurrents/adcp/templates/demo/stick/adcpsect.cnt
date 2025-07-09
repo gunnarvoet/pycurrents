@@ -1,0 +1,115 @@
+/******************************************************************************
+
+  FILE:  adcpsect.cnt
+
+  This control file is used with the adcpsect program
+  to extract ADCP data for specified sections along a cruise track
+  from a CODAS database, perform the desired calculations,
+  and write the result to text and Matlab files.
+  The sections are specified as time ranges.
+
+  This particular version is used to extract water track velocities for
+  stick plots.  Only those options used in this example are described in
+  this control file. NOTE: a more verbose control file example with all
+  possible options listed and a longer explantation of the output exists
+  in ../nav/adcpsect.cnt
+
+
+  INPUT:  CODAS database
+  OUTPUT: 1. text file (.con file) with following columns:
+             a. x-axis data (latitude in decimal degrees for this example)
+             b. y-axis data (depth in meters for this example)
+             c. zonal velocity (in cm/s for this example)
+             d. meridional velocity (in cm/s for this example)
+          2. text file of statistics--mean (.sta file)
+          3. Matlab files
+             a. _uv.mat contains array "uv" with two columns for each 
+                ensemble, first u and then v.  The row corresponds to the 
+                depth grid.
+             b. _xy.mat contains array "xyt" with a column for each ensemble,
+                and three rows: longitude, latitude, decimal day;
+                and vectors "z" and "zc" with the depth grid and the grid
+                interval centers, respectively.
+------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < output filename >
+  step_size:    < number of profiles to advance >
+  ndepth:       < number of depth bins to read and process >
+  time_ranges:  < combined or separate >
+  year_base=    < base year for decimal days >
+
+  option_list:
+    [ pg_min=      <80> ]
+
+    [ reference:       { choose only one of the following: }
+        < reference_bins <5> to <20> |
+          none |
+          final_ship_ref |
+          nav_position |
+          nav_velocity |
+          bottom_track |
+          dir_position > ]
+
+    [ regrid:
+        < integrate | interpolate | centered_average | average |
+          per_grid_interval >
+        < depth | svan | pot_svan | sigma_theta | sigma_t >
+          { one of the last 4 only if the ctd: option has been selected }
+        < grid      number= <50> origin= <16> increment= <8> |
+          grid_list number= < 5> boundaries: <20> <40> <60> <80> <100> > ]
+
+    [ contour:         { output in .con text file }
+        < latitude | longitude | time >
+        < middle | mean >
+        minimum_npts= <10>
+        units=        <0.01> ]
+
+
+    [ statistics:      { output in .sta text file }
+        [ mean ]
+        [ variance ]
+        [ extrema ]
+        [ norm_extrema ]
+        [ indices ]
+        [ all ]
+        units= <0.01>
+        end ]
+
+  { list of YMDHMS time pairs: }
+  < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+  .
+  .
+  or
+  < @../grid/ademo_os.tmg >
+-----------------------------------------------------------------------------*/
+
+  dbname:             ../adcpdb/ademo
+  output:             os     /* must be <= 5 chars. for DOS */
+  step_size:          1
+  ndepth:             50
+  time_ranges:        separate
+  year_base=          1993
+  option_list:
+    pg_min=           30
+    reference:        final_ship_ref
+    regrid:           average
+                      depth
+      grid number=    16
+        origin=       30
+        increment=    20
+    contour:          time  middle
+      minimum_npts=   1
+      units=          0.01
+    statistics:       mean variance extrema
+      units=          0.01
+      end
+    end
+
+/* TimeGrid:
+     output: ademo_os.tmg     time_interval: 60.000000    
+     time_range:   93/04/09  00:02:00  to  93/04/10  07:36:00
+*/
+ 
+@../grid/ademo_os.tmg

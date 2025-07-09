@@ -1,0 +1,78 @@
+/******************************************************************************
+
+    FILE:  profstat.cnt
+
+           This control file is used with the profstat program
+           to generate statistics on selected profiles in a CODAS database.
+
+           This particular version is used to obtain a general idea
+           of the degree of variability in the vertical velocity (W)
+           in order to derive a threshold for flagging errant profiles.
+
+  INPUT:  CODAS database
+  OUTPUT: 1. text file of profile statistics (.prs)
+          2. Matlab file of profile statistics (.mat)
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < root for output filename >
+  step_size:    < number of profiles to advance >
+  ndepth:       < number of depth bins to read and process>
+  time_ranges:  < combined | separate >
+
+  { one or more variable names, followed by various arguments as shown }
+  [ < variable name >
+      < "label" >                     { in quotes, for labelling the output }
+
+      [ reference:   < start bin > to  < end bin > ]
+      [ difference:  < 0 | 1 | 2 > ]     { for no, first, second difference }
+      [ statistics:  scale= < n > ]  { 0.01 for output in cm, 1.0 = m, etc. }
+      [ histogram:
+          nbins=     < n >
+          origin=    < n >
+          increment= < n >
+          style=     < h | c | n | cn > ]      { n = normalized display
+                                                 c = cumulative display
+                                                cn = cumulative & normalized
+                                                 h = neither }
+      [ flag_mask:
+          < bit-mask >  { bit-mask is any one or more of those defined in
+          .               profmask.h; these cumulatively indicate which criteria
+          .               to consider in flagging profile bins as bad prior to
+          .               calculations.  Default is ALL_BITS. }
+          end ]
+  end
+
+  {time_ranges:           one of the following }
+    < all >              { or } 
+                         { list of YMDHMS time pairs }
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    .
+    .                   
+                         { or }
+    < @tr_filename >     { where tr_filename is a file of timeranges }
+                         { such as the output of timegrid }
+
+-----------------------------------------------------------------------------*/
+
+  dbname:       ../adcpdb/ademo
+  output:       ademodf0             /* no extension! */
+  step_size:    2
+  ndepth:       56
+  time_ranges:  combined
+
+  /* variables list: */
+  W
+    "W component"
+    reference:    4 to 12 
+    difference:   0
+    statistics:   scale= 0.01
+    end
+  end
+
+  /* time range list */
+	all
+  /* 93/04/09 00:02:00 to 93/04/10 23:58:00 */
+
+/*****************************************************************************/

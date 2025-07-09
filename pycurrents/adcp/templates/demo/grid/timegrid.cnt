@@ -1,0 +1,32 @@
+/******************************************************************************
+
+  FILE:  timegrid.cnt
+
+         This control file is used with the timegrid program
+         to break up a given time range into smaller time ranges
+         of a specified interval.
+
+  INPUT:  none
+  OUTPUT: text file of time ranges that can be appended to an adcpsect
+          control file to extract profile data for the desired sections
+
+Note: do not use <all> time option; this will give you the specified
+time intervals for 100 years.
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  output:         < output filename >
+  time_interval:  < in minutes >
+  time_range:
+    < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+    		  {or}
+    < @tr_timerange >
+-----------------------------------------------------------------------------*/
+
+  output: ademo_os.tmg
+  time_interval: 60
+  time_range:
+    93/04/09  00:02:00 to 93/04/10  07:36:00      /* on-station */
+    /* 93/04/10  07:36:01 to 93/04/10  23:58:00       /* southeastbound */
+
+/*****************************************************************************/

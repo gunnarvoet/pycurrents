@@ -1,0 +1,40 @@
+DATABASE_NAME:   ../adcpdb/a0006
+DEFINITION_FILE: vmadcp.def
+LOG_FILE:  load.log
+YEAR_BASE: 2000
+cmd_file_list
+END
+
+./leg3007_000000.lta.cmd
+
+/* ./leg3008_000000.lta.cmd   */
+/* ./leg3009_000000.lta.cmd   */
+/* ./leg3010_000000.lta.cmd   */
+/* ./leg3011_000000.lta.cmd   */
+
+
+
+
+
+
+/*********   end of control file *****************/
+
+
+/* notes: 
+/* (1) the additional .cmd files are shown as an example                    */
+
+/* (2) REMEMBER: files should be loaded once only, and in order             */
+
+/* (3) ldcodas works with any pair of (.bin, .cmd) files -- they could      */
+/*        have been generated from UHDAS, LTA, STA, ENX, ENS, or HDSS data  */
+
+/* (4) This example uses a path to each cmd file.   Characteristics:        */
+/*     (a) The key word "cmd_file_list" tells ldcodas to loop               */
+/*           through the files and apply the same path for the cmd file     */
+/*            to the bin file that exists there.
+/*     (b)) No "end" is used at the end of the cnt file                     */
+
+                                             */
+/* (5) obviously comments are C-style comments and can be embedded in the   */
+/*        control file                                                      */
+

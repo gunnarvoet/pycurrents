@@ -1,0 +1,46 @@
+/******************************************************************************
+
+  FILE:  refabsbt.cnt
+
+         This control file is used with the refabsbt program
+         to calculate ship displacement from both fix data and
+         bottom track velocity data in a CODAS ADCP database,
+         as averaged between consecutive fixes.
+
+  INPUT:  1. text file of navigation fixes, already edited
+             (as extracted from CODAS database by ubprint then edited)
+          2. text file of bottom track velocities
+             (as extracted from CODAS database by lst_btrk)
+  OUTPUT: text file with the following columns:
+          1. time of the second fix (in decimal days)
+          2. zonal displacement between consecutive fixes (in meters)
+          3. meridional displacement between consecutive fixes (in meters)
+          4. zonal displacement calculated from bottom track (in meters)
+          5. meridional displacement calculated from bottom track (in meters)
+          6. zonal velocity cumulated over the gap
+          7. meridional velocity cumulated over the gap
+          8. length of gap (in minutes)
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  fix_file_type:    < simple | HIG >               { format of input fix file }
+  reference_file:   < input bottom track velocity file from lst_btrk >
+  fix_file:         < input file of position fixes >         { time, lon, lat }
+  output:           < output filename >
+  year_base=        < base year for decimal day conversions >
+
+  ensemble_length=  < no. of seconds in ensemble >              { usually 300 }
+  gap_tolerance=    < maximum seconds discrepancy between profile & fix time >
+                                                 { allow a little, perhaps 60 }
+-----------------------------------------------------------------------------*/
+
+  fix_file_type:    simple
+  reference_file:   ademorot.btm
+  fix_file:         ../../nav/ademo.ags
+  output:           ademo.ref
+  year_base=        1993
+
+  ensemble_length=  300
+  gap_tolerance=    60
+
+/*****************************************************************************/

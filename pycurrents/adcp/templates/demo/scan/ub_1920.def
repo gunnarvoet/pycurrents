@@ -1,0 +1,49 @@
+
+DEFINE_STRUCT USER_BUFFER  6
+  ELEM		1  SHORT	version         none
+  ELEM		1  SHORT	n_samples	none
+  ELEM 		1  SHORT	s_added		none
+  ELEM		1  SHORT	spare		none
+  ELEM		4  STRUCT	fix		none
+  ELEM		1  STRUCT	att		none
+
+DEFINE_STRUCT   fix  9
+  ELEM		1  LONG		pc_seconds	s
+  ELEM		1  LONG		gps_seconds	s
+  ELEM		1  DOUBLE	latitude	deg
+  ELEM		1  DOUBLE	longitude	deg
+  ELEM		1  FLOAT	height		m
+  ELEM		1  BYTE		dop		none
+  ELEM		1  BYTE		nsat		none
+  ELEM		1  BYTE		msg_type	none
+  ELEM		1  BYTE		spare		none
+
+DEFINE_STRUCT   att  28
+  ELEM		1  SHORT	dh_mean		cdeg
+  ELEM		1  SHORT	dh_std		cdeg
+  ELEM		1  SHORT	dh_min		cdeg
+  ELEM		1  SHORT	dh_max		cdeg
+  ELEM		1  SHORT	p_mean		cdeg
+  ELEM 		1  SHORT 	p_std		cdeg
+  ELEM 		1  SHORT 	p_min		cdeg
+  ELEM 		1  SHORT 	p_max		cdeg
+  ELEM		1  SHORT	r_mean		cdeg
+  ELEM		1  SHORT	r_std		cdeg
+  ELEM		1  SHORT	r_min		cdeg
+  ELEM		1  SHORT	r_max		cdeg
+  ELEM		1  SHORT	mrms_mean	0.1mm
+  ELEM		1  SHORT	mrms_std	0.1mm
+  ELEM		1  SHORT	mrms_min	0.1mm
+  ELEM		1  SHORT	mrms_max	0.1mm
+  ELEM		1  SHORT	brms_mean	0.1mm
+  ELEM		1  SHORT	brms_std	0.1mm
+  ELEM		1  SHORT	brms_min	0.1mm
+  ELEM		1  SHORT	brms_max	0.1mm
+  ELEM		1  SHORT	n_att		none
+  ELEM		1  SHORT	n_used		none
+  ELEM		1  SHORT	n_reacq		none
+  ELEM		1  SHORT	n_mrms		none
+  ELEM		1  SHORT	n_brms		none
+  ELEM		1  SHORT	n_outlier	none
+  ELEM		1  SHORT	spare1		none
+  ELEM		1  SHORT	spare2		none

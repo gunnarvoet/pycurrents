@@ -1,0 +1,8 @@
+to remake the documentation, 
+
+cd doc
+make html
+
+NOTE: It's probably a good idea to delete _build first
+
+This requires Sphinx be installed.

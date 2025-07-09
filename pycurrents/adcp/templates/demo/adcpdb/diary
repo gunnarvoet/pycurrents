@@ -1,0 +1,33 @@
+>> help mktrkrng
+
+  function mktrkrng(year_base, infile, outfile, dxy, halfwidth);
+  Make Alongtrack Time Ranges
+ 
+  Generate a set of time ranges to be used by adcpsect
+  for extracting velocities, typically for vector plotting.
+  Ranges are generated at uniform along-track intervals,
+  based on a smoothed version of the ship's velocity from
+  the output of smoothr.
+ 
+  yearbase: 4-digit year.
+  infile: made up of lines from *.sm (smoothr output)
+  outfile will have time ranges
+  dxy is the interval in km
+  (optional) halfwidth is the half width of the ship
+      velocity smoothing blackman filter, in units of adcp
+      ensembles.  Default is 6.
+ 
+  EF Sun  99/02/28
+ 
+
+>> dir
+
+.            adcp1920.def ademo.cnh    ademo003.blk ademoprf.lst lst_prof.cnt 
+..           adcp2240.def ademo.def    ademo004.blk core         mkblkdir.cnt 
+adcp1281.def adcp720.def  ademo001.blk ademoblk.lst diary        pc           
+adcp1320.def ademo.bbn    ademo002.blk ademodir.blk lst_conf.cnt 
+
+>> quit
+
+ 5561 flops.
+

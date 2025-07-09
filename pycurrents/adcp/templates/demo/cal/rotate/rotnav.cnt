@@ -1,0 +1,31 @@
+/******************************************************************************
+
+  FILE:  rotnav.cnt
+
+         This control file is used with the rotnav program
+         to rotate the reference layer velocities in an adcpsect .nav file.
+         The rotation can be done using a constant angle and amplitude,
+         or may be based on the ship heading.
+
+  INPUT:  adcpsect .nav file
+  OUTPUT: rotated .nav file
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  INPUT_NAV_FILE:        < input .nav file from adcpsect >
+  OUTPUT_NAV_FILE:       < output .nav file -- rotated >
+  [ INPUT_HEADING_FILE:  < input heading file from lst_hdg > ]
+  [ INPUT_ANGLE_FILE:    < input angle file > ]
+  [ amp=                 < amplitude of rotation > ]
+  [ a0=                  < constant angle of rotation > ]
+  [ sinH=                < coefficient of sin of ship heading > ]
+  [ cosH=                < coefficient of cos of ship heading > ]
+  end
+-----------------------------------------------------------------------------*/
+
+  INPUT_NAV_FILE:   ../watertrk/ademoraw.nav /* ../botmtrk/ademo.btm */
+  OUTPUT_NAV_FILE:  ../watertrk/ademorot.nav /* ../botmtrk/ademorot.btm */
+  INPUT_ANGLE_FILE: gpscal.ang
+  end
+
+/*****************************************************************************/

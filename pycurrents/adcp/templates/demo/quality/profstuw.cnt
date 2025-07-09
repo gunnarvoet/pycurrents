@@ -1,0 +1,115 @@
+/******************************************************************************
+
+    FILE:  profstat.cnt
+
+           This control file is used with the profstat program
+           to generate statistics on selected profiles in a CODAS database.
+
+           This particular version is used to obtain statistics for
+           profiles collected when the ship was underway.
+
+  INPUT:  CODAS database
+  OUTPUT: 1. text file of profile statistics (.prs)
+          2. Matlab file of profile statistics (.mat)
+-------------------------------------------------------------------------------
+  CONTROL FILE STRUCTURE:
+
+  dbname:       < CODAS database name >
+  output:       < root for output filename >
+  step_size:    < number of profiles to advance >
+  ndepth:       < number of depth bins to read and process>
+  time_ranges:  < combined | separate >
+
+  { one or more variable names, followed by various arguments as shown }
+  [ < variable name >
+      < "label" >                     { in quotes, for labelling the output }
+
+      [ reference:   < start bin > to  < end bin > ]
+      [ difference:  < 0 | 1 | 2 > ]     { for no, first, second difference }
+      [ statistics:  scale= < n > ]  { 0.01 for output in cm, 1.0 = m, etc. }
+      [ histogram:
+          nbins=     < n >
+          origin=    < n >
+          increment= < n >
+          style=     < h | c | n | cn > ]      { n = normalized display
+                                                 c = cumulative display
+                                                cn = cumulative & normalized
+                                                 h = neither }
+      [ flag_mask:
+          < bit-mask >  { bit-mask is any one or more of those defined in
+          .               profmask.h; these cumulatively indicate which criteria
+          .               to consider in flagging profile bins as bad prior to
+          .               calculations.  Default is ALL_BITS. }
+          end ]
+  end
+
+  { list of YMDHMS time pairs: }
+  < yy/mm/dd hh:mm:ss > to < yy/mm/dd hh:mm:ss >
+  .
+  .
+  or
+   @ademo_uw.arr
+-----------------------------------------------------------------------------*/
+
+  dbname:        ../adcpdb/ademo
+  output:        ademo_uw
+  step_size:     1
+  ndepth:        58
+  time_ranges:   combined
+
+  /* variables list: */
+  U
+    "U component, ADCP DEMO"
+    difference: 1
+    statistics: scale= 0.01
+    end
+  V
+    "V component, ADCP DEMO"
+    difference: 1
+    statistics: scale= 0.1
+    end
+  W
+    "W component, ADCP DEMO"
+    reference:  5 to 20
+    difference: 0
+    statistics: scale= 0.1
+    end
+  AMP_SOUND_SCAT
+    "AMPLITUDE, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    histogram: nbins= 12 origin= 20  increment= 20  style= nc
+    end
+  PERCENT_GOOD
+    "PERCENT GOOD, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    end
+  ERROR_VEL
+    "ERROR VELOCITY, ADCP DEMO"
+    difference: 0
+    statistics: scale= 0.1
+    flag_mask: ALL_BITS end
+    end
+  SPECTRAL_WIDTH
+    "SPECTRAL WIDTH, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    end
+  PERCENT_3_BEAM
+    "PERCENT 3 BEAM, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    end
+  BEAM_STATS
+    "BEAM STATISTICS, ADCP DEMO"
+    difference: 0
+    statistics: scale= 1.0
+    end
+  end
+
+
+/* append time ranges from arrdep arrdepuw.cnt output */
+
+@ademo_uw.arr
+
