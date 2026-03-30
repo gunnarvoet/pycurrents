@@ -687,7 +687,7 @@ class FileBBWHOS(FileBase):
             self.lengths = []
             ii = 0
         else:
-            ii = self.starts[-1] + self.lengths[-1]
+            ii = int(self.starts[-1]) + int(self.lengths[-1])
         while True:
             self.fobj.seek(ii)
             try:
@@ -696,7 +696,7 @@ class FileBBWHOS(FileBase):
                 break
             if ID != 0x7f7f:
                 break
-            length += 2  # for checksum
+            length = int(length) + 2  # for checksum; int() avoids uint16 overflow
             self.starts.append(ii)
             self.lengths.append(length)
             ii += length

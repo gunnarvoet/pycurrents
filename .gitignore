@@ -3,3 +3,4 @@
 .hgtags
 build
 *.egg-info
+*.so
